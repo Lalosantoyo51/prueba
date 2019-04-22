@@ -1,0 +1,4 @@
+class CancelOrderModel {
+  String comment;
+
+}
