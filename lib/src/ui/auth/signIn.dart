@@ -165,7 +165,7 @@ class _SignInState extends State<SignIn> {
                   new Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
-                      new Container(
+                        new Container(
                         decoration: BoxDecoration(
                           gradient: LinearGradient(
                             begin: Alignment.bottomLeft,

@@ -1,3 +1,4 @@
+
 import 'dart:async';
 
 import 'package:connectivity/connectivity.dart';
@@ -29,26 +30,24 @@ Future<void> main() async {
   tutorial = prefs.getString('tutorial');
   print(prefs.getString('tutorial'));
   runApp(
-      new MaterialApp(
-        title: 'El niño de los burritos',
-        debugShowCheckedModeBanner: false,
-        //home: Verification(),
-        home:(tokenModel.token  == null || tokenModel.token == "") ? SignIn() : (tokenModel.token  != null && tutorial == 'visto') ? Home() : Tutorial(),
-        routes: <String, WidgetBuilder>{
-          '/sign-in': (BuildContext context) => new SignIn(),
-          '/home': (BuildContext context) => new Home(),
-          '/sign-up': (BuildContext context) => new SignUp(),
-          '/recovery': (BuildContext context) => new Recovery(),
-          '/building': (BuildContext context) => new Buildind(),
-          '/products': (BuildContext context) => new Products(),
-          '/tutorial': (BuildContext context) => new Tutorial(),
-          '/about': (BuildContext context) => new About(),
-          '/profile': (BuildContext context) => new Profile(),
-          '/changePassword': (BuildContext context) => new changePassword(),
-          '/Verification': (BuildContext context) => new Verification(),
-        },
-      ),
+    new MaterialApp(
+      title: 'El niño de los burritos',
+      debugShowCheckedModeBanner: false,
+      //home: Verification(),
+      home:(tokenModel.token  == null || tokenModel.token == "") ? SignIn() : (tokenModel.token  != null && tutorial == 'visto') ? Home() : Tutorial(),
+      routes: <String, WidgetBuilder>{
+        '/sign-in': (BuildContext context) => new SignIn(),
+        '/home': (BuildContext context) => new Home(),
+        '/sign-up': (BuildContext context) => new SignUp(),
+        '/recovery': (BuildContext context) => new Recovery(),
+        '/building': (BuildContext context) => new Buildind(),
+        '/products': (BuildContext context) => new Products(),
+        '/tutorial': (BuildContext context) => new Tutorial(),
+        '/about': (BuildContext context) => new About(),
+        '/profile': (BuildContext context) => new Profile(),
+        '/changePassword': (BuildContext context) => new changePassword(),
+        '/Verification': (BuildContext context) => new Verification(),
+      },
+    ),
   );
 }
-
-
