@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:dio/dio.dart' ;
-import 'package:prue/src/models/token.model.dart';
+import 'package:prue/src/models/sign-in.dart';
 import 'package:prue/src/models/user.model.dart';
 import 'package:prue/src/utils/enviroment.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -19,24 +19,19 @@ class AuthService {
   }
 
 
-  Future login(String email, String password) async {
+  Future<SignInModel> login(SignInModel signIn) async {
+    var _data = json.encode(signIn);
     dio.options.baseUrl = SERVER_URL;
     dio.interceptors.add(LogInterceptor(requestBody: true));
-    var loginData = {
-      "grant_type": "password",
-      "scope": "*",
-      "client_id": "${CLIENT_ID}",
-      "client_secret": "${Client_SECRET}",
-      "username": "$email",
-      "password": "$password"
-    };
     Response response;
     response = await dio.post(
-        "oauth/token", data: loginData, onSendProgress: showDownloadProgress
+        "oauth/token", data: _data, onSendProgress: showDownloadProgress
     );
+
     var prefs = await SharedPreferences.getInstance();
     Map content = json.decode(response.toString());
     prefs.setString('access_token', content['access_token']);
+    return SignInModel.fromJson(response.data);
   }
 
   Future signUp(String name,
@@ -187,18 +182,23 @@ class AuthService {
     dio.options.baseUrl = SERVER_URL;
     dio.interceptors.add(LogInterceptor(requestBody: true));
     var loginData = {
-      "grant_type": "password",
+      "grant_type": "facebook_login",
       "scope": "*",
       "client_id": "${CLIENT_ID}",
       "client_secret": "${Client_SECRET}",
       "fb_token": "$fb_token",
       "facebook_id": "$facebook_id"
     };
+    print(loginData);
     Response response;
     response = await dio.post(
         "${API_URL}token/facebook", data: loginData,
         onSendProgress: showDownloadProgress
-    );
+    ).catchError((error){
+      print(error);
+    }).then((_){
+      print(_);
+    });
     var prefs = await SharedPreferences.getInstance();
     Map content = json.decode(response.toString());
     prefs.setString('access_token', content['access_token']);

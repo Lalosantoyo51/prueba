@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:prue/src/bloc/authController.dart';
+import 'package:prue/src/models/sign-in.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:dio/dio.dart';
@@ -22,9 +23,13 @@ class _SignInState extends State<SignIn> {
 
   bool isBussing = false;
   login() async{
+    var prefs = await SharedPreferences.getInstance();
+    _authCOntroller.signInModel.username = _authCOntroller.username.text;
+    _authCOntroller.signInModel.password = _authCOntroller.password.text;
     setState(() {
       isBussing = true;
-      _authCOntroller.signIn().then((response){
+      _authCOntroller.signIn().then((SignInModel signInModel){
+        prefs.setString('access_token', signInModel.access_token);
         _onAlertSucces(context);
       }).catchError((e){
         print(e.response?.toString());
@@ -98,13 +103,13 @@ class _SignInState extends State<SignIn> {
             style: TextStyle(color: Colors.white, fontSize: 20),
           ),
           onPressed: (){
-            if(tutorial == 'visto'){
-              Navigator.pop(context);
-              Navigator.pushReplacementNamed(context, '/home');
-            }else {
-              Navigator.pop(context);
-              Navigator.pushReplacementNamed(context, '/tutorial');
-            }
+             if(tutorial == 'visto'){
+                Navigator.pop(context);
+                Navigator.pushReplacementNamed(context, '/home');
+                }else {
+                Navigator.pop(context);
+                Navigator.pushReplacementNamed(context, '/tutorial');
+                }
           },
           width: 120,
         )
@@ -113,21 +118,24 @@ class _SignInState extends State<SignIn> {
   }
 
   Future _loginFb() async {
+    var prefs = await SharedPreferences.getInstance();
     final FacebookLoginResult result =
     await facebookSignIn.logInWithReadPermissions(['email']);
     FacebookAccessToken accessToken = result.accessToken;
     var token =accessToken.token;
     print(token);
+    prefs.setString('fb_token', token);
     Response response;
     response = await dio.get(
         '${FACEBOOK_GRAPH_API_URL}me?fields=id%2Cemail%2Cgender%2Cfirst_name%2Clast_name&access_token=${token}');
     Map<String, dynamic> user = jsonDecode(response.data);
     print(user['email']);
-    var prefs = await SharedPreferences.getInstance();
-    prefs.setString('fb_token', token);
     fb_token = token;
     _authCOntroller.fb_token = token;
     _authCOntroller.facebook_id = int.parse(user['id']);
+    signInwithFB();
+
+
   }
 
   signInwithFB() async {
@@ -140,6 +148,7 @@ class _SignInState extends State<SignIn> {
        _onAlertSucces(context);
       });
     } on DioError catch(e) {
+      print('heeeeeeeeeeeeeeeeeeeeeeeeeeeeee ${e.response}');
       if(e.response != null) {
         if(e.response.data['errors']['facebook_id'] != null){
           error = "${e.response.data['errors']['facebook_id'][0].toString()}";
@@ -263,11 +272,7 @@ class _SignInState extends State<SignIn> {
                           setState(() {
                             isBussing = true;
                           });
-                          if(fb_token == null){
-                            _loginFb();
-                          }else {
-                            signInwithFB();
-                          }
+                          _loginFb();
                         },
                         height: 50.0,
                         minWidth: 250,
