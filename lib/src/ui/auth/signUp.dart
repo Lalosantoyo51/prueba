@@ -4,6 +4,7 @@ import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:intl/intl.dart';
 import 'package:prue/src/bloc/authController.dart';
 import 'package:dio/dio.dart';
+import 'package:prue/src/models/sign-up.dart';
 import 'package:prue/src/utils/enviroment.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'dart:convert';
@@ -59,19 +60,29 @@ class _SignUpState extends State<SignUp> {
   }
 
   signUp() async {
+      _authCOntroller.signUpModel.name = _authCOntroller.name.text;
+      _authCOntroller.signUpModel.last_name = _authCOntroller.last_name.text;
+      _authCOntroller.signUpModel.email = _authCOntroller.email.text;
+      _authCOntroller.signUpModel.phone = int.parse(_authCOntroller.phone.text);
+      _authCOntroller.signUpModel.password = _authCOntroller.password.text;
+      _authCOntroller.signUpModel.password_confirmation = _authCOntroller.password_confirmation.text;
+      _authCOntroller.signUpModel.birthday = _authCOntroller.birthday;
+      _authCOntroller.signUpModel.gender = _authCOntroller.gender.text;
      final prefs = await SharedPreferences.getInstance();
      setState(() {
        isIndicador  = true;
      });
      try  {
-       await _authCOntroller.signUp().then((_){
-        var token = prefs.getString('access_token');
+       await _authCOntroller.signUp().then((SignUpModel signUpModel){
+         print('token del registro ${signUpModel.access_token}');
+         prefs.setString('access_token', signUpModel.access_token);
+         var token = prefs.getString('access_token');
          print(token);
-         if( token != null){
-           Navigator.pop(context);
-           Navigator.of(context).pushNamed('/Verification');
+         if( token != null) {
+           Navigator.of(context).pushNamed('/home');
+           print('cambio de pagina ');
            setState(() {
-              isIndicador  = false;
+             isIndicador = false;
            });
          }
        });
@@ -216,6 +227,7 @@ if(user['gender'] == 'male'){
   Widget build(BuildContext context) {
     loadItems();
     return new MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: new Scaffold(
         body: new Container(
           child: Center(

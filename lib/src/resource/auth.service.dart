@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:dio/dio.dart' ;
 import 'package:prue/src/models/sign-in.dart';
+import 'package:prue/src/models/sign-up.dart';
 import 'package:prue/src/models/user.model.dart';
 import 'package:prue/src/utils/enviroment.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -27,39 +28,15 @@ class AuthService {
     response = await dio.post(
         "oauth/token", data: _data, onSendProgress: showDownloadProgress
     );
-
-    var prefs = await SharedPreferences.getInstance();
-    Map content = json.decode(response.toString());
-    prefs.setString('access_token', content['access_token']);
     return SignInModel.fromJson(response.data);
   }
 
-  Future signUp(String name,
-      String last_name,
-      String email,
-      String phone,
-      String password,
-      String password_confirmation,
-      String birthday,
-      String gender,) async {
+  Future<SignUpModel> signUp(SignUpModel signUpModel,) async {
     var url = '${API_URL}users';
-    var signIn = {
-      "name": "$name",
-      "last_name": "$last_name",
-      "email": "$email",
-      "phone": "$phone",
-      "password": "$password",
-      "password_confirmation": "$password_confirmation",
-      "birthday": "$birthday",
-      "gender": "$gender",
-    };
+    var _data = json.encode(signUpModel);
     Response response;
-    response = await dio.post(url, data: signIn);
-    print(response.data.toString());
-    var prefs = await SharedPreferences.getInstance();
-    Map content = json.decode(response.toString());
-    prefs.setString('access_token', content['accessToken']);
-    print(prefs.getString('access_token'));
+    response = await dio.post(url, data: _data);
+    return SignUpModel.fromJson(response.data);
   }
 
   Future signUpFacebook(String name,

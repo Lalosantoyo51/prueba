@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:prue/src/models/sign-in.dart';
+import 'package:prue/src/models/sign-up.dart';
 import 'package:prue/src/models/user.model.dart';
 import '../resource/auth.service.dart';
 
@@ -17,6 +18,7 @@ class AuthCOntroller {
   final TextEditingController newpassword_confirmation = new TextEditingController();
   final TextEditingController newpassword = new TextEditingController();
   SignInModel signInModel = new SignInModel();
+  SignUpModel signUpModel = new SignUpModel();
   String birthday;
   int code;
   String fb_token;
@@ -28,8 +30,8 @@ class AuthCOntroller {
     return await _authService.login(signInModel);
  }
 
-  Future signUp() async{
-   return await _authService.signUp(name.text, last_name.text, email.text, phone.text, password.text, password_confirmation.text, birthday, gender.text);
+  Future <SignUpModel> signUp() async{
+   return await _authService.signUp(signUpModel);
  }
 
   Future reset() async{
