@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:flutter/services.dart';
 import 'package:location/location.dart';
+import 'package:prue/src/models/area.model.dart';
 import 'package:prue/src/utils/enviroment.dart';
 import '../models/location.model.dart';
 import 'package:dio/dio.dart';
@@ -27,6 +29,7 @@ class LocationService  {
   Future getLocation() async {
     final prefs = await SharedPreferences.getInstance();
     await _locationService.changeSettings(accuracy: LocationAccuracy.HIGH);
+    var coordinates = [];
 
     LocationData location;
     // Platform messages may fail, so we use a try/catch PlatformException.
@@ -38,13 +41,16 @@ class LocationService  {
         print("Permission: $_permission");
         if (_permission) {
           location = await _locationService.getLocation();
-          _locationModel.lat = location.latitude;
-          _locationModel.lng = location.longitude;
           var prefs = await SharedPreferences.getInstance();
           prefs.setString('lat', location.latitude.toString());
           prefs.setString('lng', location.longitude.toString());
           print(location.latitude.toString());
-
+          coordinates =[{
+            'latitude' : location.latitude,
+            'longitude' : location.longitude,
+          }];
+          print(coordinates);
+          return coordinates;
         }
       } else {
         bool serviceStatusResult = await _locationService.requestService();
@@ -80,21 +86,14 @@ class LocationService  {
     return MessageResponse.fromJson(response.data);
   }
 
- Future <AreaResponse> getCurrentPlace() async{
+ Future <AreaModel> getCurrentPlace(AreaModel areaModel) async{
    var prefs = await SharedPreferences.getInstance();
+   var _data = json.encode(areaModel);
    var token = prefs.getString('access_token');
     var url = '${API_URL}users/current/place';
-    var getcurrentFrom = {
-      //"lat": prefs.getString('lat'),
-      //"lng": prefs.getString('lng'),
-      "lat": 21.912089,
-      "lng": -102.312895 ,
-      //"lat": 21.812089,
-      //"lng": -102.432895 ,
-    };
-
+    print(_data);
     Response response;
-    response = await dio.post(url, data:getcurrentFrom , options: RequestOptions(
+    response = await dio.post(url, data:_data , options: RequestOptions(
         headers:{
           'Content-Type': 'application/x-www-form-urlencoded',
           'X-Requested-With': 'XMLHttpRequest',
@@ -102,7 +101,7 @@ class LocationService  {
         }
     ));
     prefs.setInt('place_id', response.data['id']);
-    return AreaResponse.fromJson(response.data);
+    return AreaModel.fromJson(response.data);
 
  }
 

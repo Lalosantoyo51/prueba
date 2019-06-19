@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:prue/src/models/area.model.dart';
 import 'package:prue/src/models/areaResponse.dart';
 import '../../bloc/location.controller.dart';
 import '../../bloc/authController.dart';
@@ -88,8 +89,11 @@ class _HomeState extends State<Home> {
       });
     }
     _locationController.getlocation().then((_){
-      _locationController.getCurrentPlace().then((AreaResponse area){
-        area_type = area.results.type;
+      _locationController.areaModel.lat = _[0]['latitude'];
+      _locationController.areaModel.lng = _[0]['longitude'];
+      _locationController.getCurrentPlace().then((AreaModel areaModel){
+        print(areaModel.type);
+        area_type = areaModel.type;
         _locationController.setMessage().then((MessageResponse messageModel){
           setState(() {
             message = messageModel.results.message;
