@@ -82,13 +82,7 @@ class AuthService {
 
   signOut() async {
     var prefs = await SharedPreferences.getInstance();
-    prefs.remove('access_token');
-    userG.setName = null;
-    userG.setUser_id = null;
-    userG.setLast_Name = null;
-    userG.setPhone = null;
-    userG.setBirthday = null;
-    userG.setGender = null;
+    prefs.clear();
   }
 
   Future <UserModel> getUser() async {
@@ -107,23 +101,19 @@ class AuthService {
     return UserModel.fromJson(response.data);
   }
 
-  Future changePassword(String password,
-      String newpassword,
-      String newpassword_confirmation) async {
+  Future <UserModel> changePassword(UserModel userModel) async {
+    var _data = json.encode(userModel);
     var prefs = await SharedPreferences.getInstance();
     var token = prefs.getString('access_token');
     var url = '${API_URL}users/current/password';
-    var changePassword = {
-      "password": "$password",
-      "newpassword": "$newpassword",
-      "newpassword_confirmation": "$newpassword_confirmation",
-    };
-    return await dio.put(url, data: changePassword, options: RequestOptions(
+    Response response;
+    response= await dio.put(url, data: _data, options: RequestOptions(
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
           'X-Requested-With': 'XMLHttpRequest',
           'authorization': 'Bearer $token'
         }));
+    return UserModel.fromJson(response.data);
   }
 
   Future verifycode(int code) async {

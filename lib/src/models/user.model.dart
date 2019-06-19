@@ -12,8 +12,20 @@ class UserModel  {
 
   String birthday;
 
+  String password;
+
+  String newpassword;
+
+  String newpassword_confirmation;
+
   UserModel({this.id, this.name, this.last_name, this.gender, this.phone,
-      this.birthday});
+      this.birthday, this.password,this.newpassword,this.newpassword_confirmation});
+
+  Map toJson() => {
+    'password': this.password,
+    'newpassword': this.newpassword,
+    'newpassword_confirmation': this.newpassword_confirmation,
+  };
 
   factory UserModel.fromJson(Map<String, dynamic> json){
     return new UserModel(

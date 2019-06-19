@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:prue/src/models/user.model.dart';
 import '../../widgets/menu.dart';
 import '../../bloc/authController.dart';
 import 'package:dio/dio.dart';
@@ -14,8 +15,8 @@ class _changePasswordState extends State<changePassword> {
   String error;
   Future change() async {
     try{
-     await _authCOntroller.changePassword().then((_){
-       print(_);
+     await _authCOntroller.changePassword().then((UserModel userModel){
+       print(userModel.name);
        _onAlertButtonSucces(context);
      });
     }on DioError catch(e){

@@ -23,6 +23,7 @@ class AuthCOntroller {
   int code;
   String fb_token;
   int facebook_id;
+  UserModel userModel = new UserModel();
 
   final AuthService _authService = new AuthService();
 
@@ -46,8 +47,11 @@ class AuthCOntroller {
     return await _authService.signOut();
  }
 
- Future changePassword() async{
-    return await _authService.changePassword(password.text, newpassword.text, newpassword_confirmation.text);
+ Future<UserModel> changePassword() async{
+    userModel.password = password.text;
+    userModel.newpassword = newpassword.text;
+    userModel.newpassword_confirmation = newpassword_confirmation.text;
+    return await _authService.changePassword(userModel);
  }
  Future verifyCode() async{
     return await _authService.verifycode(1234).catchError((err){
