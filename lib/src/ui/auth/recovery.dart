@@ -10,11 +10,11 @@ class Recovery extends StatefulWidget {
 }
 
 class _RecoveryState extends State<Recovery> {
-  AuthCOntroller _authCOntroller = new AuthCOntroller();
+  AuthCOntroller _authController = new AuthCOntroller();
   String error;
 
    login() async{
-     _authCOntroller.reset().catchError((e){
+     _authController.reset().catchError((e){
         print("data${e.response?.data['errors']['email']}");
         error = e.response?.data['errors']['email'].toString();
         _onAlertWarning(context);
@@ -108,7 +108,7 @@ class _RecoveryState extends State<Recovery> {
                   new Container(
                     margin: EdgeInsets.only(left: 10, right: 10),
                     child: new TextField(
-                      controller: _authCOntroller.email,
+                      controller: _authController.email,
                       decoration: new InputDecoration(
                         icon: new Icon(Icons.email),
                         labelText: "ingresa correo",

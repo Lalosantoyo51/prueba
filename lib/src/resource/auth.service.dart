@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:dio/dio.dart' ;
 import 'package:prue/src/models/sign-in.dart';
+import 'package:prue/src/models/sign-up-facebook.dart';
 import 'package:prue/src/models/sign-up.dart';
 import 'package:prue/src/models/user.model.dart';
 import 'package:prue/src/utils/enviroment.dart';
@@ -39,25 +40,18 @@ class AuthService {
     return SignUpModel.fromJson(response.data);
   }
 
-  Future signUpFacebook(String name,
-      String last_name,
-      String email,
-      String phone,
-      int facebook_id,
-      String birthday,
-      String gender,) async {
+  Future signUpFacebook(SignUpFacebookModel signUpFacebookModel) async {
+    var _data = json.encode(signUpFacebookModel);
     var url = '${API_URL}users/facebook';
-    var signIn = {
-      "name": "$name",
-      "last_name": "$last_name",
-      "email": "$email",
-      "phone": "$phone",
-      "facebook_id": "$facebook_id",
-      "birthday": "$birthday",
-      "gender": "$gender",
-    };
+    print(signUpFacebookModel.email);
+    print(signUpFacebookModel.gender);
+    print(signUpFacebookModel.birthday);
+    print(signUpFacebookModel.facebook_id);
+    print(signUpFacebookModel.phone);
+    print(signUpFacebookModel.name);
+    print(signUpFacebookModel.last_name);
     Response response;
-    response = await dio.post(url, data: signIn);
+    response = await dio.post(url, data: _data);
     print(response.data.toString());
     var prefs = await SharedPreferences.getInstance();
     Map content = json.decode(response.toString());
@@ -83,6 +77,8 @@ class AuthService {
   signOut() async {
     var prefs = await SharedPreferences.getInstance();
     prefs.clear();
+    var tutorial = 'visto';
+    prefs.setString('tutorial', tutorial);
   }
 
   Future <UserModel> getUser() async {
@@ -116,13 +112,14 @@ class AuthService {
     return UserModel.fromJson(response.data);
   }
 
-  Future verifycode(int code) async {
+  Future verifycode(String code) async {
     var url = '${API_URL}users/current/code';
     var Formcode = {
-      "code": "$code",
+      "code": '$code',
     };
     var prefs = await SharedPreferences.getInstance();
     var token = prefs.getString('access_token');
+    print(Formcode);
     return await dio.post(url, data: Formcode, options: RequestOptions(
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',

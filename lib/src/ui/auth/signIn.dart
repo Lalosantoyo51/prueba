@@ -16,7 +16,7 @@ class SignIn extends StatefulWidget {
 }
 
 class _SignInState extends State<SignIn> {
-  AuthCOntroller _authCOntroller = new AuthCOntroller();
+  AuthCOntroller _authController = new AuthCOntroller();
   static final FacebookLogin facebookSignIn = new FacebookLogin();
   String fb_token;
   String error;
@@ -24,11 +24,11 @@ class _SignInState extends State<SignIn> {
   bool isBussing = false;
   login() async{
     var prefs = await SharedPreferences.getInstance();
-    _authCOntroller.signInModel.username = _authCOntroller.username.text;
-    _authCOntroller.signInModel.password = _authCOntroller.password.text;
+    _authController.signInModel.username = _authController.username.text;
+    _authController.signInModel.password = _authController.password.text;
     setState(() {
       isBussing = true;
-      _authCOntroller.signIn().then((SignInModel signInModel){
+      _authController.signIn().then((SignInModel signInModel){
         prefs.setString('access_token', signInModel.access_token);
         _onAlertSucces(context);
       }).catchError((e){
@@ -131,8 +131,8 @@ class _SignInState extends State<SignIn> {
     Map<String, dynamic> user = jsonDecode(response.data);
     print(user['email']);
     fb_token = token;
-    _authCOntroller.fb_token = token;
-    _authCOntroller.facebook_id = int.parse(user['id']);
+    _authController.fb_token = token;
+    _authController.facebook_id = int.parse(user['id']);
     signInwithFB();
 
 
@@ -143,7 +143,7 @@ class _SignInState extends State<SignIn> {
       setState(() {
         isBussing = true;
       });
-      await _authCOntroller.signInWithFacebook().then((_){
+      await _authController.signInWithFacebook().then((_){
        print(_);
        _onAlertSucces(context);
       });
@@ -207,7 +207,7 @@ class _SignInState extends State<SignIn> {
                               padding: const EdgeInsets.only(
                                   left: 28.0, right: 28.0, top: 14.0, bottom: 7.0),
                               child: TextFormField(
-                                controller: _authCOntroller.username,
+                                controller: _authController.username,
                                 decoration: const InputDecoration(
                                     labelStyle: TextStyle(color: Colors.grey),
                                     filled: false,
@@ -223,7 +223,7 @@ class _SignInState extends State<SignIn> {
                               padding: const EdgeInsets.only(
                                   left: 28.0, right: 28.0, top: 14.0, bottom: 7.0),
                               child: TextFormField(
-                                controller: _authCOntroller.password,
+                                controller: _authController.password,
                                 decoration: const InputDecoration(
                                     labelStyle: TextStyle(color: Colors.grey),
                                     filled: false,

@@ -11,7 +11,7 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
-  AuthCOntroller _authCOntroller = new AuthCOntroller();
+  AuthCOntroller _authController = new AuthCOntroller();
   User user = new User();
   int year;
   int day;
@@ -159,7 +159,7 @@ class _ProfileState extends State<Profile> {
                 color: Colors.orange
               ),
               onPressed: (){
-                _authCOntroller.signOut().then((_){
+                _authController.signOut().then((_){
                   Navigator.pop(context);
                   Navigator.of(context).pushNamed('/sign-in');
                 });

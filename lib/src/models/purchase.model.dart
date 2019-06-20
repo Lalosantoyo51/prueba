@@ -17,5 +17,10 @@ class pruchaseModel {
   String created_at;
   String status;
   String payment;
+  List<SaleDetailsModel> sale_details;
+  List<RaitinsMoldel> ratings;
+  EmployeeModel employeeModel;
+  PlaceUserModel place_user;
+
 
 }

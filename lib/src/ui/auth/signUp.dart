@@ -19,7 +19,7 @@ class SignUp extends StatefulWidget {
 }
 
 class _SignUpState extends State<SignUp> {
-  AuthCOntroller _authCOntroller = new AuthCOntroller();
+  AuthCOntroller _authController = new AuthCOntroller();
   static final FacebookLogin facebookSignIn = new FacebookLogin();
   String error;
   String fb_token;
@@ -55,25 +55,25 @@ class _SignUpState extends State<SignUp> {
   void initState() {
     setState(() {
       _isTextFieldVisible = true;
-      getUserfb();
+      //getUserfb();
     });
   }
 
   signUp() async {
-      _authCOntroller.signUpModel.name = _authCOntroller.name.text;
-      _authCOntroller.signUpModel.last_name = _authCOntroller.last_name.text;
-      _authCOntroller.signUpModel.email = _authCOntroller.email.text;
-      _authCOntroller.signUpModel.phone = int.parse(_authCOntroller.phone.text);
-      _authCOntroller.signUpModel.password = _authCOntroller.password.text;
-      _authCOntroller.signUpModel.password_confirmation = _authCOntroller.password_confirmation.text;
-      _authCOntroller.signUpModel.birthday = _authCOntroller.birthday;
-      _authCOntroller.signUpModel.gender = _authCOntroller.gender.text;
+      _authController.signUpModel.name = _authController.name.text;
+      _authController.signUpModel.last_name = _authController.last_name.text;
+      _authController.signUpModel.email = _authController.email.text;
+      _authController.signUpModel.phone = int.parse(_authController.phone.text);
+      _authController.signUpModel.password = _authController.password.text;
+      _authController.signUpModel.password_confirmation = _authController.password_confirmation.text;
+      _authController.signUpModel.birthday = _authController.birthday;
+      _authController.signUpModel.gender = _authController.gender.text;
      final prefs = await SharedPreferences.getInstance();
      setState(() {
        isIndicador  = true;
      });
      try  {
-       await _authCOntroller.signUp().then((SignUpModel signUpModel){
+       await _authController.signUp().then((SignUpModel signUpModel){
          print('token del registro ${signUpModel.access_token}');
          prefs.setString('access_token', signUpModel.access_token);
          var token = prefs.getString('access_token');
@@ -163,15 +163,15 @@ class _SignUpState extends State<SignUp> {
     var prefs = await SharedPreferences.getInstance();
     prefs.setString('fb_token', token);
     fb_token = token;
-    _authCOntroller.fb_token = token;
-    _authCOntroller.facebook_id = int.parse(user['id']);
-   _authCOntroller.email.text =  user['email'];
-   _authCOntroller.name.text =  user['first_name'];
-   _authCOntroller.last_name.text =  user['last_name'];
-   _authCOntroller.gender.text = user['gender'];
+    _authController.fb_token = token;
+    _authController.facebook_id = int.parse(user['id']);
+   _authController.email.text =  user['email'];
+   _authController.name.text =  user['first_name'];
+   _authController.last_name.text =  user['last_name'];
+   _authController.gender.text = user['gender'];
     setState(() => _isTextFieldVisible = false);
 if(user['gender'] == 'male'){
-      _authCOntroller.gender.text = 'Male';
+      _authController.gender.text = 'Male';
     }
   }
   getUserfb()async{
@@ -184,20 +184,20 @@ if(user['gender'] == 'male'){
     Map<String, dynamic> user = jsonDecode(response.data);
     print(response.data);
     print(user['email']);
-    _authCOntroller.fb_token = fb_token;
-    _authCOntroller.facebook_id = int.parse(user['id']);
-    _authCOntroller.email.text =  user['email'];
-    _authCOntroller.name.text =  user['first_name'];
-    _authCOntroller.last_name.text =  user['last_name'];
+    _authController.fb_token = fb_token;
+    _authController.facebook_id = int.parse(user['id']);
+    _authController.email.text =  user['email'];
+    _authController.name.text =  user['first_name'];
+    _authController.last_name.text =  user['last_name'];
     if(user['gender'] == 'male'){
-      _authCOntroller.gender.text = 'Male';
+      _authController.gender.text = 'Male';
     }
     setState(() => _isTextFieldVisible = false);
 
   }
   signUpwithFB() async {
     try  {
-      await _authCOntroller.signUpFacebook().then((_){
+      await _authController.signUpFacebook().then((_){
         print(_);
       });
     } on DioError catch(e) {
@@ -271,7 +271,7 @@ if(user['gender'] == 'male'){
                             new Container(
                               margin: EdgeInsets.only(left: 10, right: 10),
                               child: new TextField(
-                                controller: _authCOntroller.name,
+                                controller: _authController.name,
                                 decoration: new InputDecoration(
                                   icon: new Icon(Icons.person_pin_circle),
                                   labelText: "Nombre",
@@ -286,7 +286,7 @@ if(user['gender'] == 'male'){
                             new Container(
                                 margin: EdgeInsets.only(left: 10, right: 10),
                                 child: TextField(
-                                  controller: _authCOntroller.last_name,
+                                  controller: _authController.last_name,
                                   decoration: new InputDecoration(
                                     labelText: "Apellido",
                                     icon: new Icon(Icons.person_pin_circle),
@@ -300,7 +300,7 @@ if(user['gender'] == 'male'){
                             new Container(
                                 margin: EdgeInsets.only(left: 10, right: 10),
                                 child: TextField(
-                                  controller: _authCOntroller.email,
+                                  controller: _authController.email,
                                   decoration: new InputDecoration(
                                     labelText: "Correo electronico",
                                     icon: new Icon(Icons.email),
@@ -313,7 +313,7 @@ if(user['gender'] == 'male'){
                             new Container(
                                 margin: EdgeInsets.only(left: 10, right: 10),
                                 child: TextField(
-                                  controller: _authCOntroller.phone,
+                                  controller: _authController.phone,
                                   decoration: new InputDecoration(
                                     labelText: "Numero telefonico",
                                     icon: new Icon(Icons.phone),
@@ -336,12 +336,24 @@ if(user['gender'] == 'male'){
                                       fillColor:Color(9),
                                       icon: new Icon(Icons.calendar_today),
                                       labelText: 'Cumpleaños', hasFloatingPlaceholder: false),
-                                  onChanged: (dt) => {
-                                  setState(
-                                        () => date = dt,
-                                  ),
-                                  _authCOntroller.birthday = "${date.year}-${date.month}-${date.day}",
-                                  print(_authCOntroller.birthday)
+                                  onChanged: (dt){
+                                 setState(() {
+                                   date = dt;
+                                 });
+                                 if(date.day < 10 && date.month < 10){
+                                   _authController.birthday = "${date.year}-0${date.month}-0${date.day}";
+                                   print("fecha 1 ${_authController.birthday}");
+                                 }if(date.day < 10 && date.month > 9 ){
+                                   _authController.birthday = "${date.year}-${date.month}-0${date.day}";
+                                   print("fecha 2 ${_authController.birthday}");
+                                 }if(date.day > 9 && date.month < 10 ){
+                                   _authController.birthday = "${date.year}-0${date.month}-${date.day}";
+                                   print("fecha 3 ${_authController.birthday}");
+                                 }if(date.month > 9 && date.day >9) {
+                                   _authController.birthday = "${date.year}-${date.month}-${date.day}";
+                                   print("fecha 4 ${_authController.birthday}");
+                                 }
+                                 print('cambio');
                                   }
                               ),
                             ),
@@ -363,7 +375,7 @@ if(user['gender'] == 'male'){
                                   ),
                                   onChanged: (value){
                                     selected = value;
-                                    _authCOntroller.gender.text = value;
+                                    _authController.gender.text = value;
                                     setState(() {
 
                                     });
@@ -373,7 +385,7 @@ if(user['gender'] == 'male'){
                             new Container(
                                 margin: EdgeInsets.only(left: 10, right: 10),
                                 child: TextField(
-                                  controller: _authCOntroller.gender,
+                                  controller: _authController.gender,
                                   decoration: new InputDecoration(
                                     labelText: "Genero",
                                     icon: new Icon(Icons.person_pin_circle),
@@ -389,7 +401,7 @@ if(user['gender'] == 'male'){
                             ? new Container(
                                 margin: EdgeInsets.only(left: 10, right: 10),
                                 child: TextField(
-                                  controller: _authCOntroller.password,
+                                  controller: _authController.password,
                                   decoration: new InputDecoration(
                                     labelText: "Contraseña",
                                     icon: new Icon(Icons.lock),
@@ -407,7 +419,7 @@ if(user['gender'] == 'male'){
                             ? new Container(
                                 margin: EdgeInsets.only(left: 10, right: 10),
                                 child: TextField(
-                                  controller: _authCOntroller.password_confirmation,
+                                  controller: _authController.password_confirmation,
                                   decoration: new InputDecoration(
                                     labelText: "Confirmar Contraseña",
                                     icon: new Icon(Icons.lock),

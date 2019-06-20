@@ -18,7 +18,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   locationController _locationController = new locationController();
-  AuthCOntroller _authCOntroller = new AuthCOntroller();
+  AuthCOntroller _authController = new AuthCOntroller();
 
 
   User user = new User();
@@ -78,7 +78,7 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     if(user.getName == null){
-      _authCOntroller.getUser().then((UserModel userModel){
+      _authController.getUser().then((UserModel userModel){
         user.setName = userModel.name;
         user.setGender = userModel.gender;
         user.setBirthday = userModel.birthday;
@@ -89,6 +89,7 @@ class _HomeState extends State<Home> {
       });
     }
     _locationController.getlocation().then((_){
+      print('nose que sea ${_[0]['latitude']}');
       _locationController.areaModel.lat = _[0]['latitude'];
       _locationController.areaModel.lng = _[0]['longitude'];
       _locationController.getCurrentPlace().then((AreaModel areaModel){

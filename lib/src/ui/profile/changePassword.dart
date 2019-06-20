@@ -11,11 +11,11 @@ class changePassword extends StatefulWidget {
 }
 
 class _changePasswordState extends State<changePassword> {
-  AuthCOntroller _authCOntroller = new AuthCOntroller();
+  AuthCOntroller _authController = new AuthCOntroller();
   String error;
   Future change() async {
     try{
-     await _authCOntroller.changePassword().then((UserModel userModel){
+     await _authController.changePassword().then((UserModel userModel){
        print(userModel.name);
        _onAlertButtonSucces(context);
      });
@@ -103,7 +103,7 @@ class _changePasswordState extends State<changePassword> {
                         padding: const EdgeInsets.only(
                             left: 28.0, right: 28.0, top: 14.0, bottom: 7.0),
                         child: TextField(
-                          controller: _authCOntroller.password,
+                          controller: _authController.password,
                           decoration: const InputDecoration(
                               labelStyle: TextStyle(color: Colors.grey),
                               filled: false,
@@ -118,7 +118,7 @@ class _changePasswordState extends State<changePassword> {
                         padding: const EdgeInsets.only(
                             left: 28.0, right: 28.0, bottom: 7.0),
                         child: TextField(
-                          controller: _authCOntroller.newpassword,
+                          controller: _authController.newpassword,
                           obscureText: true,
                           decoration: const InputDecoration(
                             filled: false,
@@ -133,7 +133,7 @@ class _changePasswordState extends State<changePassword> {
                         padding: const EdgeInsets.only(
                             left: 28.0, right: 28.0, bottom: 7.0),
                         child: TextField(
-                          controller: _authCOntroller.newpassword_confirmation,
+                          controller: _authController.newpassword_confirmation,
                           obscureText: true,
                           decoration: const InputDecoration(
                             filled: false,

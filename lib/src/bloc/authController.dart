@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:prue/src/models/sign-in.dart';
+import 'package:prue/src/models/sign-up-facebook.dart';
 import 'package:prue/src/models/sign-up.dart';
 import 'package:prue/src/models/user.model.dart';
 import '../resource/auth.service.dart';
@@ -19,8 +20,9 @@ class AuthCOntroller {
   final TextEditingController newpassword = new TextEditingController();
   SignInModel signInModel = new SignInModel();
   SignUpModel signUpModel = new SignUpModel();
+  SignUpFacebookModel signUpFacebookModel = new SignUpFacebookModel();
   String birthday;
-  int code;
+  String code;
   String fb_token;
   int facebook_id;
   UserModel userModel = new UserModel();
@@ -54,7 +56,7 @@ class AuthCOntroller {
     return await _authService.changePassword(userModel);
  }
  Future verifyCode() async{
-    return await _authService.verifycode(1234).catchError((err){
+    return await _authService.verifycode(code).catchError((err){
       print(err);
     });
  }
@@ -69,13 +71,13 @@ class AuthCOntroller {
     });
  }
  Future signUpFacebook()async{
-    print(name.text);
-    print(last_name.text);
-    print(email.text);
-    print(phone.text);
-    print(facebook_id);
-    print(birthday);
-    print(gender.text);
-    return await _authService.signUpFacebook(name.text, last_name.text, email.text, phone.text, facebook_id, birthday, gender.text);
+    signUpFacebookModel.name = name.text;
+    signUpFacebookModel.last_name = last_name.text;
+    signUpFacebookModel.email = email.text;
+    signUpFacebookModel.phone = phone.text;
+    signUpFacebookModel.facebook_id = facebook_id;
+    signUpFacebookModel.birthday = birthday;
+    signUpFacebookModel.gender = gender.text;
+    return await _authService.signUpFacebook(signUpFacebookModel);
  }
 }

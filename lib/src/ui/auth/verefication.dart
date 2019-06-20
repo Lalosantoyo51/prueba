@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:prue/src/bloc/authController.dart';
 import '../../resource/auth.service.dart';
 import 'package:dio/dio.dart';
 
@@ -10,6 +11,7 @@ class Verification extends StatefulWidget {
 
 class _VerificationState extends State<Verification> {
   AuthService _authService = new AuthService();
+  AuthCOntroller _authController = new AuthCOntroller();
 
   //controller
   TextEditingController number1 = TextEditingController();
@@ -24,13 +26,23 @@ class _VerificationState extends State<Verification> {
 
   String result;
 
-  verify(){
-    result = "${int.parse(number1.text)}${int.parse(number2.text)}${int.parse(number3.text)}${int.parse(number4.text)}";
-    _authService.verifycode(1234).then((e){
-
+  verify() async{
+    result = "${number1.text}${number2.text}${number3.text}${number4.text}";
+    _authController.code = result;
+    _authController.verifyCode().then((e){
+      print(e);
+      Navigator.of(context).pushNamed('/home');
     }).catchError((err){
       print(err);
     });
+    try{
+      await _authController.verifyCode().then((e){
+        print(e);
+      });
+    }on DioError catch(e){
+      print(e.response.data);
+
+    }
   }
 
   signOut(){
