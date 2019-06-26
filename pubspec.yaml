@@ -25,16 +25,6 @@ dependencies:
   google_maps_flutter: ^0.5.7
 
 
-
-
-
-
-
-
-
-
-
-
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -66,6 +56,13 @@ flutter:
     - assets/about/burrito.png
     - assets/user/Female.png
     - assets/user/Male.png
+    - assets/orders/B.png
+    - assets/orders/BP.png
+    - assets/orders/BV.png
+    - assets/orders/BVP.png
+    - assets/orders/P.png
+    - assets/orders/V.png
+    - assets/orders/VP.png
 
 
 

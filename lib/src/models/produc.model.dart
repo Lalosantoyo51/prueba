@@ -6,10 +6,13 @@ class ProductModel {
 
   ProductModel({this.id, this.name, this.description, this.product_type});
 
-  ProductModel.fromJson(Map<String, dynamic> json)
-      : id = json['id'],
-        name = json['name'],
-        description = json['ndescription'],
-        product_type = json['product_type'];
+  factory ProductModel.fromJson(Map<String, dynamic> json) {
+    return ProductModel(
+        id: json['id'],
+        name: json['name'],
+        description: json['description'],
+        product_type: json['product_type'],
+    );
+  }
 
 }

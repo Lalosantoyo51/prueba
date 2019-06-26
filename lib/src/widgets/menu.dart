@@ -114,7 +114,7 @@ class _MainDrawerState extends State<MainDrawer> {
     final drawerItems = ListView(
       children: <Widget>[
         createDrawerItems("Inicio", home, '/home'),
-        createDrawerItems("Historial", history, '/'),
+        createDrawerItems("Historial", history, '/history'),
         createDrawerItems("My perfil", profile, '/profile'),
         createDrawerItems("Acerca de ", about, '/about'),
 
