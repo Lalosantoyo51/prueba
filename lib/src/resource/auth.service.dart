@@ -75,6 +75,12 @@ class AuthService {
   }
 
   signOut() async {
+    userG.setGender =null;
+    userG.setBirthday =null;
+    userG.setPhone =null;
+    userG.setLast_Name =null;
+    userG.setUser_id =null;
+    userG.setName =null;
     var prefs = await SharedPreferences.getInstance();
     prefs.clear();
     var tutorial = 'visto';

@@ -2,7 +2,7 @@ class EmployeeModel{
   int id;
   String name;
   String last_name;
-  int phone;
+  String phone;
 
   EmployeeModel({this.id,this.name,this.last_name,this.phone});
 

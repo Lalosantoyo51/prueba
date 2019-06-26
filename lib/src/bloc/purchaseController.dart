@@ -15,4 +15,7 @@ class PurchaseController {
   Future<List<PurchaseModel>> history() async{
     return await _purchaseService.history(numberpage);
   }
+  Future<List<PurchaseModel>> getOrders() async{
+    return await _purchaseService.getOrders();
+  }
 }

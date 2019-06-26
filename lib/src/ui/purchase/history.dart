@@ -71,327 +71,327 @@ class _HistoryState extends State<History> {
                         padding: EdgeInsets.only(left: 20, right: 20, top: 10),
                         child: Card(
                             child: Stack(
-                          children: <Widget>[
-                            Image.asset(
-                              "assets/orders/${src[index]}",
-                              width: 100,
-                            ),
-                            Padding(
-                              padding: EdgeInsets.only(
-                                top: 10,
-                                left: 110,
-                              ),
-                              child: Column(
-                                children: <Widget>[
-                                  Center(
-                                      child: Align(
-                                    child: Text(
-                                      '${titles[index]}',
-                                      style: TextStyle(
-                                          fontSize: 20, color: Colors.black),
-                                    ),
-                                    alignment: Alignment.topLeft,
-                                  )),
-                                  Align(
-                                    alignment: Alignment.topLeft,
-                                    child: Text(
-                                      'Pedido #${purchaseModel[index].id + 1000}',
-                                      style: TextStyle(color: Colors.black38),
-                                    ),
+                              children: <Widget>[
+                                Image.asset(
+                                  "assets/orders/${src[index]}",
+                                  width: 100,
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.only(
+                                    top: 10,
+                                    left: 110,
                                   ),
-                                  Align(
-                                    alignment: Alignment.topLeft,
-                                    child: Text(
-                                      dateFormat.format(new DateFormat(
-                                              "yyyy-MM-dd HH:mm:ss")
-                                          .parse(
-                                              purchaseModel[index].created_at)),
-                                      style: TextStyle(color: Colors.black54),
-                                    ),
-                                  ) , purchaseModel[index].status == 'Order' ?
-                                  Align(
-                                    alignment: Alignment.topLeft,
-                                    child: Text('Orden Activa',
-                                      style: TextStyle(color: Colors.black38),),
-                                  ): purchaseModel[index].status == 'Delivered' ?
-                                  Align(
-                                    alignment: Alignment.topLeft,
-                                    child: Text('Orden completa',
-                                      style: TextStyle(color: Colors.black38),),
-                                  ):purchaseModel[index].status =='Rejected' ?
-                                  Align(
-                                    alignment: Alignment.topLeft,
-                                    child: Text('Orden cancelada',
-                                      style: TextStyle(color: Colors.black38),),
-                                  ):
-                                  Container(),
-                                  purchaseModel[index].place_user.name == null && purchaseModel[index].offices.name != null  ?
-                                  Align(
-                                    alignment: Alignment.topLeft,
-                                    child:
-                                    Text('${purchaseModel[index].offices.buildin.name} ${purchaseModel[index].offices.name}',
-                                      style: TextStyle(color: Colors.black38),)
-                                  ):purchaseModel[index].place_user.name != null && purchaseModel[index].offices.name == null  ?
-                                  Align(
-                                      alignment: Alignment.topLeft,
-                                      child:
-                                      Text('${purchaseModel[index].place_user.name} ',
-                                        style: TextStyle(color: Colors.black38),)
-                                  ):Align(
-                                      alignment: Alignment.topLeft,
-                                      child:
-                                      Text('tu ubicacion actual',
-                                        style: TextStyle(color: Colors.black38),)
-                                  )
-                                ],
-                              ),
-                            ),
-                            Padding(
-                                padding: EdgeInsets.only(
-                                    top: 110, left: 10, right: 10),
-                                child: Container(
-                                  height: 1,
-                                  width: 300,
-                                  color: Colors.black12,
-                                )),
-                            Padding(
-                                padding: EdgeInsets.only(
-                                    top: 110, left: 15, right: 10),
-                                child: Row(
-                                  children: <Widget>[
-                                    Padding(
-                                      padding: EdgeInsets.only(
-                                        top: 20,
-                                        bottom: 20,
-                                      ),
-                                      child: Text(r"$",
-                                          style: TextStyle(
-                                              fontSize: 25,
-                                              color: Colors.orange,
-                                              fontWeight: FontWeight.bold)),
-                                    ),
-                                    Text(
-                                        '${formatter.format(purchaseModel[index].cost)}',
-                                        style: TextStyle(
-                                            fontSize: 25,
-                                            color: Colors.orange,
-                                            fontWeight: FontWeight.bold)),
-                                    purchaseModel[index].status == 'Delivered' && purchaseModel[index].qualified_by_customer == 'Unrated' ?
-                                    Padding(
-                                        padding: EdgeInsets.only(left: 10),
-                                        child: FlatButton(
-                                          child: Icon(
-                                            Icons.star,
-                                            color: Colors.orange,
-                                          ),)):Padding(
-                                        padding: EdgeInsets.only(left: 10),
-                                        child: FlatButton(
-                                          child: Container(),)),
-                                    Padding(
-                                        padding: EdgeInsets.only(left: 10),
-                                        child: FlatButton(
-                                            child: Icon(
-                                              Icons.info_outline,
-                                              color: Colors.orange,
+                                  child: Column(
+                                    children: <Widget>[
+                                      Center(
+                                          child: Align(
+                                            child: Text(
+                                              '${titles[index]}',
+                                              style: TextStyle(
+                                                  fontSize: 20, color: Colors.black),
                                             ),
-                                            color: Colors.white,
-                                            onPressed: () {
-                                              sale = [];
-                                              sale = purchaseModel[index]
-                                                  .sale_details;
-                                              showDialog(
-                                                  context: context,
-                                                  builder:
-                                                      (BuildContext context) {
-                                                    return AlertDialog(
-                                                        title: Image.asset(
-                                                          "assets/orders/${src[index]}",
-                                                          height: 100,
-                                                        ),
-                                                        content: Container(
-                                                          height: 200,
-                                                          child: Column(
-                                                            children: <Widget>[
-                                                              Text(
-                                                                '${titles[index]}',
-                                                                style: TextStyle(
-                                                                    fontSize:
+                                            alignment: Alignment.topLeft,
+                                          )),
+                                      Align(
+                                        alignment: Alignment.topLeft,
+                                        child: Text(
+                                          'Pedido #${purchaseModel[index].id + 1000}',
+                                          style: TextStyle(color: Colors.black38),
+                                        ),
+                                      ),
+                                      Align(
+                                        alignment: Alignment.topLeft,
+                                        child: Text(
+                                          dateFormat.format(new DateFormat(
+                                              "yyyy-MM-dd HH:mm:ss")
+                                              .parse(
+                                              purchaseModel[index].created_at)),
+                                          style: TextStyle(color: Colors.black54),
+                                        ),
+                                      ) , purchaseModel[index].status == 'Order' ?
+                                      Align(
+                                        alignment: Alignment.topLeft,
+                                        child: Text('Orden Activa',
+                                          style: TextStyle(color: Colors.black38),),
+                                      ): purchaseModel[index].status == 'Delivered' ?
+                                      Align(
+                                        alignment: Alignment.topLeft,
+                                        child: Text('Orden completa',
+                                          style: TextStyle(color: Colors.black38),),
+                                      ):purchaseModel[index].status =='Rejected' ?
+                                      Align(
+                                        alignment: Alignment.topLeft,
+                                        child: Text('Orden cancelada',
+                                          style: TextStyle(color: Colors.black38),),
+                                      ):
+                                      Container(),
+                                      purchaseModel[index].place_user.name == null && purchaseModel[index].offices.name != null  ?
+                                      Align(
+                                          alignment: Alignment.topLeft,
+                                          child:
+                                          Text('${purchaseModel[index].offices.buildin.name} ${purchaseModel[index].offices.name}',
+                                            style: TextStyle(color: Colors.black38),)
+                                      ):purchaseModel[index].place_user.name != null && purchaseModel[index].offices.name == null  ?
+                                      Align(
+                                          alignment: Alignment.topLeft,
+                                          child:
+                                          Text('${purchaseModel[index].place_user.name} ',
+                                            style: TextStyle(color: Colors.black38),)
+                                      ):Align(
+                                          alignment: Alignment.topLeft,
+                                          child:
+                                          Text('tu ubicacion actual',
+                                            style: TextStyle(color: Colors.black38),)
+                                      )
+                                    ],
+                                  ),
+                                ),
+                                Padding(
+                                    padding: EdgeInsets.only(
+                                        top: 110, left: 10, right: 10),
+                                    child: Container(
+                                      height: 1,
+                                      width: 300,
+                                      color: Colors.black12,
+                                    )),
+                                Padding(
+                                    padding: EdgeInsets.only(
+                                        top: 110, left: 15, right: 10),
+                                    child: Row(
+                                      children: <Widget>[
+                                        Padding(
+                                          padding: EdgeInsets.only(
+                                            top: 20,
+                                            bottom: 20,
+                                          ),
+                                          child: Text(r"$",
+                                              style: TextStyle(
+                                                  fontSize: 25,
+                                                  color: Colors.orange,
+                                                  fontWeight: FontWeight.bold)),
+                                        ),
+                                        Text(
+                                            '${formatter.format(purchaseModel[index].cost)}',
+                                            style: TextStyle(
+                                                fontSize: 25,
+                                                color: Colors.orange,
+                                                fontWeight: FontWeight.bold)),
+                                        purchaseModel[index].status == 'Delivered' && purchaseModel[index].qualified_by_customer == 'Unrated' ?
+                                        Padding(
+                                            padding: EdgeInsets.only(left: 10),
+                                            child: FlatButton(
+                                              child: Icon(
+                                                Icons.star,
+                                                color: Colors.orange,
+                                              ),)):Padding(
+                                            padding: EdgeInsets.only(left: 10),
+                                            child: FlatButton(
+                                              child: Container(),)),
+                                        Padding(
+                                            padding: EdgeInsets.only(left: 10),
+                                            child: FlatButton(
+                                                child: Icon(
+                                                  Icons.info_outline,
+                                                  color: Colors.orange,
+                                                ),
+                                                color: Colors.white,
+                                                onPressed: () {
+                                                  sale = [];
+                                                  sale = purchaseModel[index]
+                                                      .sale_details;
+                                                  showDialog(
+                                                      context: context,
+                                                      builder:
+                                                          (BuildContext context) {
+                                                        return AlertDialog(
+                                                            title: Image.asset(
+                                                              "assets/orders/${src[index]}",
+                                                              height: 100,
+                                                            ),
+                                                            content: Container(
+                                                              height: 200,
+                                                              child: Column(
+                                                                children: <Widget>[
+                                                                  Text(
+                                                                    '${titles[index]}',
+                                                                    style: TextStyle(
+                                                                        fontSize:
                                                                         20,
-                                                                    color: Colors
-                                                                        .black),
-                                                              ),
-                                                              Padding(
-                                                                  padding:
+                                                                        color: Colors
+                                                                            .black),
+                                                                  ),
+                                                                  Padding(
+                                                                      padding:
                                                                       EdgeInsets
                                                                           .only(
-                                                                              top: 10)),
-                                                              Row(
-                                                                children: <
-                                                                    Widget>[
-                                                                  Align(
-                                                                    alignment:
+                                                                          top: 10)),
+                                                                  Row(
+                                                                    children: <
+                                                                        Widget>[
+                                                                      Align(
+                                                                        alignment:
                                                                         Alignment
                                                                             .topLeft,
-                                                                    child: Text(
-                                                                      'Cantidad',
-                                                                      style: Theme.of(
+                                                                        child: Text(
+                                                                          'Cantidad',
+                                                                          style: Theme.of(
                                                                               context)
-                                                                          .primaryTextTheme
-                                                                          .caption
-                                                                          .copyWith(
+                                                                              .primaryTextTheme
+                                                                              .caption
+                                                                              .copyWith(
                                                                               color: Colors.black),
-                                                                      overflow:
+                                                                          overflow:
                                                                           TextOverflow
                                                                               .ellipsis,
+                                                                        ),
+                                                                      ),
+                                                                      Padding(
+                                                                        padding: EdgeInsets
+                                                                            .only(
+                                                                            left:
+                                                                            40),
+                                                                        child:
+                                                                        Align(
+                                                                          alignment:
+                                                                          Alignment
+                                                                              .topLeft,
+                                                                          child:
+                                                                          Text(
+                                                                            'Producto',
+                                                                            style: Theme.of(context)
+                                                                                .primaryTextTheme
+                                                                                .caption
+                                                                                .copyWith(color: Colors.black),
+                                                                            overflow:
+                                                                            TextOverflow.ellipsis,
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                      Padding(
+                                                                        padding: EdgeInsets
+                                                                            .only(
+                                                                            left:
+                                                                            30),
+                                                                        child:
+                                                                        Align(
+                                                                          alignment:
+                                                                          Alignment
+                                                                              .topLeft,
+                                                                          child:
+                                                                          Text(
+                                                                            'Importe',
+                                                                            style: Theme.of(context)
+                                                                                .primaryTextTheme
+                                                                                .caption
+                                                                                .copyWith(color: Colors.black),
+                                                                            overflow:
+                                                                            TextOverflow.ellipsis,
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                  Container(
+                                                                    child: ListView
+                                                                        .builder(
+                                                                      shrinkWrap:
+                                                                      true,
+                                                                      itemCount: sale
+                                                                          .length,
+                                                                      itemBuilder:
+                                                                          (BuildContext
+                                                                      context,
+                                                                          int index) {
+                                                                        return Column(
+                                                                          children: <
+                                                                              Widget>[
+                                                                            Row(
+                                                                              children: <
+                                                                                  Widget>[
+                                                                                Padding(
+                                                                                  padding: EdgeInsets.only(left: 20, right: 40),
+                                                                                  child: Text(
+                                                                                    '${sale[index].quantity}',
+                                                                                    style: Theme.of(context).primaryTextTheme.caption.copyWith(color: Colors.black),
+                                                                                    overflow: TextOverflow.ellipsis,
+                                                                                  ),
+                                                                                ),
+                                                                                Expanded(
+                                                                                    child: Container(
+                                                                                        child: Text(
+                                                                                          "${sale[index].productPlace.product.name}",
+                                                                                          maxLines: 3,
+                                                                                          style: Theme.of(context).primaryTextTheme.caption.copyWith(color: Colors.black),
+                                                                                          overflow: TextOverflow.ellipsis,
+                                                                                        ))),
+                                                                                Padding(
+                                                                                    padding: EdgeInsets.only(right: 25),
+                                                                                    child: Row(
+                                                                                      children: <Widget>[
+                                                                                        Text(
+                                                                                          r'$',
+                                                                                          style: Theme.of(context).primaryTextTheme.caption.copyWith(color:Colors.black,),
+                                                                                          overflow: TextOverflow.ellipsis,
+                                                                                        ),
+                                                                                        Text(
+                                                                                          '${formatter.format(sale[index].cost)}',
+                                                                                          style: Theme.of(context).primaryTextTheme.caption.copyWith(color:Colors.black,),
+                                                                                          overflow: TextOverflow.ellipsis,
+                                                                                        ),
+                                                                                      ],
+                                                                                    )
+                                                                                ),
+                                                                              ],
+                                                                            ),
+                                                                          ],
+                                                                        );
+                                                                      },
                                                                     ),
                                                                   ),
                                                                   Padding(
-                                                                    padding: EdgeInsets
-                                                                        .only(
-                                                                            left:
-                                                                                40),
-                                                                    child:
-                                                                        Align(
-                                                                      alignment:
-                                                                          Alignment
-                                                                              .topLeft,
+                                                                      padding: EdgeInsets
+                                                                          .only(
+                                                                          top:
+                                                                          10,
+                                                                          left:
+                                                                          5,
+                                                                          right:
+                                                                          5),
                                                                       child:
-                                                                          Text(
-                                                                        'Producto',
-                                                                        style: Theme.of(context)
-                                                                            .primaryTextTheme
-                                                                            .caption
-                                                                            .copyWith(color: Colors.black),
-                                                                        overflow:
-                                                                            TextOverflow.ellipsis,
-                                                                      ),
-                                                                    ),
-                                                                  ),
+                                                                      Container(
+                                                                        height: 1,
+                                                                        width: 300,
+                                                                        color: Colors
+                                                                            .black12,
+                                                                      )),
                                                                   Padding(
-                                                                    padding: EdgeInsets
-                                                                        .only(
-                                                                            left:
-                                                                                30),
+                                                                    padding: EdgeInsets.only(right: 20),
                                                                     child:
-                                                                        Align(
-                                                                      alignment:
-                                                                          Alignment
-                                                                              .topLeft,
-                                                                      child:
-                                                                          Text(
-                                                                        'Importe',
-                                                                        style: Theme.of(context)
-                                                                            .primaryTextTheme
-                                                                            .caption
-                                                                            .copyWith(color: Colors.black),
-                                                                        overflow:
-                                                                            TextOverflow.ellipsis,
-                                                                      ),
+                                                                    Align(
+                                                                      child: Text(
+                                                                          r'$'+'${formatter.format(purchaseModel[index].cost)}',
+                                                                          style: TextStyle(
+                                                                              fontSize: 14,
+                                                                              color: Colors.orange,
+                                                                              fontWeight: FontWeight.bold)),
+                                                                      alignment: Alignment
+                                                                          .topRight,
                                                                     ),
                                                                   ),
                                                                 ],
                                                               ),
-                                                              Container(
-                                                                child: ListView
-                                                                    .builder(
-                                                                  shrinkWrap:
-                                                                      true,
-                                                                  itemCount: sale
-                                                                      .length,
-                                                                  itemBuilder:
-                                                                      (BuildContext
-                                                                              context,
-                                                                          int index) {
-                                                                    return Column(
-                                                                      children: <
-                                                                          Widget>[
-                                                                        Row(
-                                                                          children: <
-                                                                              Widget>[
-                                                                            Padding(
-                                                                              padding: EdgeInsets.only(left: 20, right: 40),
-                                                                              child: Text(
-                                                                                '${sale[index].quantity}',
-                                                                                style: Theme.of(context).primaryTextTheme.caption.copyWith(color: Colors.black),
-                                                                                overflow: TextOverflow.ellipsis,
-                                                                              ),
-                                                                            ),
-                                                                            Expanded(
-                                                                                child: Container(
-                                                                                    child: Text(
-                                                                              "${sale[index].productPlace.product.name}",
-                                                                              maxLines: 3,
-                                                                              style: Theme.of(context).primaryTextTheme.caption.copyWith(color: Colors.black),
-                                                                              overflow: TextOverflow.ellipsis,
-                                                                            ))),
-                                                                            Padding(
-                                                                              padding: EdgeInsets.only(right: 25),
-                                                                              child: Row(
-                                                                                children: <Widget>[
-                                                                                  Text(
-                                                                                    r'$',
-                                                                                    style: Theme.of(context).primaryTextTheme.caption.copyWith(color:Colors.black,),
-                                                                                    overflow: TextOverflow.ellipsis,
-                                                                                  ),
-                                                                                  Text(
-                                                                                    '${formatter.format(sale[index].cost)}',
-                                                                                    style: Theme.of(context).primaryTextTheme.caption.copyWith(color:Colors.black,),
-                                                                                    overflow: TextOverflow.ellipsis,
-                                                                                  ),
-                                                                                ],
-                                                                              )
-                                                                            ),
-                                                                          ],
-                                                                        ),
-                                                                      ],
-                                                                    );
-                                                                  },
-                                                                ),
-                                                              ),
-                                                              Padding(
-                                                                  padding: EdgeInsets
-                                                                      .only(
-                                                                      top:
-                                                                      10,
-                                                                      left:
-                                                                      5,
-                                                                      right:
-                                                                      5),
-                                                                  child:
-                                                                  Container(
-                                                                    height: 1,
-                                                                    width: 300,
-                                                                    color: Colors
-                                                                        .black12,
-                                                                  )),
-                                                              Padding(
-                                                                padding: EdgeInsets.only(right: 20),
-                                                                child:
-                                                                Align(
-                                                                  child: Text(
-                                                                      r'$'+'${formatter.format(purchaseModel[index].cost)}',
-                                                                      style: TextStyle(
-                                                                          fontSize: 14,
-                                                                          color: Colors.orange,
-                                                                          fontWeight: FontWeight.bold)),
-                                                                  alignment: Alignment
-                                                                      .topRight,
-                                                                ),
-                                                              ),
-                                                            ],
-                                                          ),
-                                                        ));
+                                                            ));
+                                                      });
+                                                  print(sale.length);
+                                                  sale.forEach((sale) {
+                                                    print(sale
+                                                        .productPlace.product.name);
                                                   });
-                                              print(sale.length);
-                                              sale.forEach((sale) {
-                                                print(sale
-                                                    .productPlace.product.name);
-                                              });
-                                            })),
-                                  ],
-                                )),
-                          ],
-                        ))));
+                                                })),
+                                      ],
+                                    )),
+                              ],
+                            ))));
               },
             ),
           ),
