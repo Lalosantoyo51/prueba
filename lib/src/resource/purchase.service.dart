@@ -57,10 +57,30 @@ class PurchaseService{
           'authorization' : 'Bearer $token'
         }
     ));
-    print(response.data[0]);
     var data =
     (response.data as List).map((data) => PurchaseModel.fromJson(data)).toList();
     return data;
+  }
+
+  Future  CancelOrder (int id,String comment)async{
+    var Datacomment={
+      'comment' : '$comment'
+    };
+    print(comment);
+    print("$id");
+    var prefs = await SharedPreferences.getInstance();
+    var token = prefs.getString('access_token');
+    var url = '${API_URL}sales/$id';
+    Response response;
+    response = await dio.put(url,data: Datacomment, options: RequestOptions(
+        headers:{
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'X-Requested-With': 'XMLHttpRequest',
+          'authorization' : 'Bearer $token'
+        }
+    ));
+    print(response.data[0]);
+    return response.data;
   }
 
 

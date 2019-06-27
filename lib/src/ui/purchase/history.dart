@@ -164,18 +164,14 @@ class _HistoryState extends State<History> {
                                             top: 20,
                                             bottom: 20,
                                           ),
-                                          child: Text(r"$",
-                                              style: TextStyle(
-                                                  fontSize: 25,
-                                                  color: Colors.orange,
-                                                  fontWeight: FontWeight.bold)),
-                                        ),
-                                        Text(
-                                            '${formatter.format(purchaseModel[index].cost)}',
-                                            style: TextStyle(
-                                                fontSize: 25,
-                                                color: Colors.orange,
-                                                fontWeight: FontWeight.bold)),
+                                          child: Container(
+                                            width: 80,
+                                            child: Text(r"$" +'${formatter.format(purchaseModel[index].cost)}',
+                                                style: TextStyle(
+                                                    fontSize: 20,
+                                                    color: Colors.orange,
+                                                    fontWeight: FontWeight.bold)),
+                                          )),
                                         purchaseModel[index].status == 'Delivered' && purchaseModel[index].qualified_by_customer == 'Unrated' ?
                                         Padding(
                                             padding: EdgeInsets.only(left: 10),

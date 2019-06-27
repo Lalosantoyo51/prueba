@@ -1,19 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:prue/src/bloc/purchaseController.dart';
 import 'package:prue/src/models/area.model.dart';
-import 'package:prue/src/models/areaResponse.dart';
 import 'package:prue/src/models/purchase.model.dart';
 import 'package:prue/src/models/sale-details-model.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 import '../../bloc/location.controller.dart';
 import '../../bloc/authController.dart';
 import '../../models/messageResponse.dart';
-import '../../models/areaResponse.dart';
-import '../../models/buildingResponse.dart';
 import '../../widgets/menu.dart';
 import '../../models/user.model.dart';
 import '../../models/Userget.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:dio/dio.dart';
 
 class Home extends StatefulWidget {
   List<PurchaseModel> purchaseModel = new List();
@@ -47,7 +46,8 @@ class _HomeState extends State<Home> {
   }
 
   @override
-  void initState() {
+  void initState(){
+    initializeDateFormatting();
     if(user.getName == null){
       _authController.getUser().then((UserModel userModel){
         user.setName = userModel.name;
@@ -87,6 +87,25 @@ class _HomeState extends State<Home> {
     }
     return false;
   }
+  _onAlertButtonError(context){
+    Alert(
+      context: context,
+      type: AlertType.warning,
+      title: "Advertencia",
+      desc: "El campo comentario es obligatorio",
+      buttons: [
+        DialogButton(
+          color: Colors.orange,
+          child: Text(
+            "Aceptar",
+            style: TextStyle(color: Colors.white, fontSize: 20),
+          ),
+          onPressed: () => Navigator.pop(context),
+          width: 120,
+        )
+      ],
+    ).show();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -97,7 +116,13 @@ class _HomeState extends State<Home> {
         backgroundColor: Colors.orange,
       ),
       drawer: MainDrawer(),
-      body: Stack(
+      body:
+      message == null ? Center(
+        child: Text('No estas en zona burrera'),
+      ):
+      purchaseModel.length < 1 && message != null ?Center(
+        child: Text('$message'),
+      ):Stack(
         children: <Widget>[
           Container(
             child: ListView.builder(
@@ -214,26 +239,37 @@ class _HomeState extends State<Home> {
                                                 fontSize: 25,
                                                 color: Colors.orange,
                                                 fontWeight: FontWeight.bold)),
-                                        purchaseModel[index].status == 'Delivered' && purchaseModel[index].qualified_by_customer == 'Unrated' ?
                                         Padding(
-                                            padding: EdgeInsets.only(left: 10),
-                                            child: FlatButton(
-                                              child: Icon(
-                                                Icons.star,
-                                                color: Colors.orange,
-                                              ),)):Padding(
-                                            padding: EdgeInsets.only(left: 10),
-                                            child: FlatButton(
-                                              child: Container(),)),
-                                        Padding(
-                                            padding: EdgeInsets.only(left: 10),
-                                            child: FlatButton(
+                                            padding: EdgeInsets.only(left: 30),
+                                            child: Container(
+                                              width: 20,
+                                              child: GestureDetector(
                                                 child: Icon(
-                                                  Icons.info_outline,
+                                                  Icons.chat_bubble,
+                                                  color: Colors.orange,
+                                                ),),
+                                            )),
+                                        Padding(
+                                            padding: EdgeInsets.only(left: 40),
+                                            child: Container(
+                                              width: 20,
+                                              child: GestureDetector(
+                                                child: Icon(
+                                                  Icons.phone,
+                                                  color: Colors.orange,
+                                                ),),
+                                            )),
+                                        Padding(
+                                            padding: EdgeInsets.only(left: 40),
+                                            child: Container(
+                                              width: 20,
+                                              child: GestureDetector(
+                                                child: Icon(
+                                                  Icons.info,
                                                   color: Colors.orange,
                                                 ),
-                                                color: Colors.white,
-                                                onPressed: () {
+                                                onTap: (){
+                                                  print("${purchaseModel[index].id}");
                                                   sale = [];
                                                   sale = purchaseModel[index]
                                                       .sale_details;
@@ -272,22 +308,16 @@ class _HomeState extends State<Home> {
                                                                             .topLeft,
                                                                         child: Text(
                                                                           'Cantidad',
-                                                                          style: Theme.of(
-                                                                              context)
-                                                                              .primaryTextTheme
-                                                                              .caption
-                                                                              .copyWith(
-                                                                              color: Colors.black),
-                                                                          overflow:
-                                                                          TextOverflow
-                                                                              .ellipsis,
+                                                                          style: TextStyle(
+                                                                            fontSize: 15
+                                                                          ),
                                                                         ),
                                                                       ),
                                                                       Padding(
                                                                         padding: EdgeInsets
                                                                             .only(
                                                                             left:
-                                                                            40),
+                                                                            25),
                                                                         child:
                                                                         Align(
                                                                           alignment:
@@ -296,12 +326,9 @@ class _HomeState extends State<Home> {
                                                                           child:
                                                                           Text(
                                                                             'Producto',
-                                                                            style: Theme.of(context)
-                                                                                .primaryTextTheme
-                                                                                .caption
-                                                                                .copyWith(color: Colors.black),
-                                                                            overflow:
-                                                                            TextOverflow.ellipsis,
+                                                                            style: TextStyle(
+                                                                                fontSize: 15
+                                                                            ),
                                                                           ),
                                                                         ),
                                                                       ),
@@ -318,12 +345,9 @@ class _HomeState extends State<Home> {
                                                                           child:
                                                                           Text(
                                                                             'Importe',
-                                                                            style: Theme.of(context)
-                                                                                .primaryTextTheme
-                                                                                .caption
-                                                                                .copyWith(color: Colors.black),
-                                                                            overflow:
-                                                                            TextOverflow.ellipsis,
+                                                                              style: TextStyle(
+                                                                                  fontSize: 15
+                                                                              ),
                                                                           ),
                                                                         ),
                                                                       ),
@@ -347,7 +371,7 @@ class _HomeState extends State<Home> {
                                                                               children: <
                                                                                   Widget>[
                                                                                 Padding(
-                                                                                  padding: EdgeInsets.only(left: 20, right: 40),
+                                                                                  padding: EdgeInsets.only(left: 30, right: 40),
                                                                                   child: Text(
                                                                                     '${sale[index].quantity}',
                                                                                     style: Theme.of(context).primaryTextTheme.caption.copyWith(color: Colors.black),
@@ -363,7 +387,7 @@ class _HomeState extends State<Home> {
                                                                                           overflow: TextOverflow.ellipsis,
                                                                                         ))),
                                                                                 Padding(
-                                                                                    padding: EdgeInsets.only(right: 25),
+                                                                                    padding: EdgeInsets.only(right: 10),
                                                                                     child: Row(
                                                                                       children: <Widget>[
                                                                                         Text(
@@ -403,7 +427,7 @@ class _HomeState extends State<Home> {
                                                                             .black12,
                                                                       )),
                                                                   Padding(
-                                                                    padding: EdgeInsets.only(right: 20),
+                                                                    padding: EdgeInsets.only(right: 10),
                                                                     child:
                                                                     Align(
                                                                       child: Text(
@@ -416,6 +440,77 @@ class _HomeState extends State<Home> {
                                                                           .topRight,
                                                                     ),
                                                                   ),
+                                                                  Padding(padding: EdgeInsets.only(top: 15),
+                                                                  child: GestureDetector(
+                                                                    child: Text('Cancelar orden', style: TextStyle(color: Colors.red),),
+                                                                    onTap: (){
+                                                                      showDialog(
+                                                                          context: context,
+                                                                          builder:
+                                                                              (BuildContext context) {
+                                                                            return AlertDialog(
+                                                                              title: Text('¿Por qué quieres cancelar el pedido?'),
+                                                                              content: Container(
+                                                                                height: 250,
+                                                                                child: ListView(
+                                                                                  children: <Widget>[
+                                                                                    Container(
+                                                                                      height: 200,
+                                                                                      decoration: BoxDecoration(
+                                                                                        border: Border.all(color: Colors.black54),
+                                                                                        borderRadius: BorderRadius.circular(2.00),
+                                                                                      ),
+                                                                                      child: TextField(
+                                                                                        maxLines: null,
+                                                                                        keyboardType: TextInputType.multiline,
+                                                                                        decoration: new InputDecoration(
+                                                                                            hintText: 'Comentarios',
+                                                                                        ),
+                                                                                        onChanged: (value){
+                                                                                          if(value.length ==0 ){
+                                                                                            purchaseController.comment = null;
+                                                                                          }else {
+                                                                                            purchaseController.comment = value;
+                                                                                          }
+
+                                                                                        },
+                                                                                      ),
+                                                                                    ),
+                                                                                    Padding(padding: EdgeInsets.only(top: 10)),
+                                                                                    Center(
+                                                                                      child: GestureDetector(
+                                                                                        child: Text('confirmar',
+                                                                                          style: TextStyle(color: Colors.red, fontSize: 20),),
+                                                                                        onTap: ()  {
+                                                                                          print(purchaseController.comment);
+                                                                                          if(purchaseController.comment == null || purchaseController.comment == 'null'){
+                                                                                            _onAlertButtonError(context);
+                                                                                          }else {
+                                                                                            purchaseController.id = purchaseModel[index].id;
+                                                                                            try  {
+                                                                                              purchaseController.cancelOrder().then((_){
+                                                                                                print(_);
+                                                                                                Navigator.pop(context);
+                                                                                                purchaseModel.clear();
+                                                                                                getPurchase();
+                                                                                              });
+                                                                                            } on DioError catch(e) {
+                                                                                              print(e.response.data);
+                                                                                            }
+                                                                                          }
+                                                                                        },
+                                                                                      ),
+                                                                                    ),
+                                                                                  ],
+                                                                                )
+
+                                                                              ),
+                                                                            );
+                                                                          }).then((_){
+                                                                            Navigator.pop(context);
+                                                                      });
+                                                                    },
+                                                                  ))
                                                                 ],
                                                               ),
                                                             ));
@@ -425,7 +520,9 @@ class _HomeState extends State<Home> {
                                                     print(sale
                                                         .productPlace.product.name);
                                                   });
-                                                })),
+                                                },
+                                              ),
+                                            )),
                                       ],
                                     )),
                               ],
@@ -462,9 +559,9 @@ class _HomeState extends State<Home> {
     return arr;
   }
 
-  getPurchase() {
+  getPurchase() async{
     this.saleDatails = [];
-    purchaseController.getOrders().then((List<PurchaseModel> purchase) {
+    await purchaseController.getOrders().then((List<PurchaseModel> purchase) {
       setState(() {
         purchaseModel.addAll(purchase);
       });

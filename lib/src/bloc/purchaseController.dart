@@ -6,6 +6,8 @@ import '../models/purchase.model.dart';
 class PurchaseController {
   final PurchaseService _purchaseService = new PurchaseService();
   int numberpage;
+  int id;
+  String comment =null;
 
 
   Future<List<Provision>> getProducts() async{
@@ -18,4 +20,9 @@ class PurchaseController {
   Future<List<PurchaseModel>> getOrders() async{
     return await _purchaseService.getOrders();
   }
+
+  Future cancelOrder() async{
+    return await _purchaseService.CancelOrder(id, comment);
+  }
+
 }
