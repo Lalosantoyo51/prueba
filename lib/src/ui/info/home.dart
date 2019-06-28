@@ -13,6 +13,8 @@ import '../../models/Userget.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:dio/dio.dart';
+import 'package:url_launcher/url_launcher.dart';
+
 
 class Home extends StatefulWidget {
   List<PurchaseModel> purchaseModel = new List();
@@ -257,7 +259,12 @@ class _HomeState extends State<Home> {
                                                 child: Icon(
                                                   Icons.phone,
                                                   color: Colors.orange,
-                                                ),),
+                                                ),
+                                                onTap:(){
+                                                  print(purchaseModel[index].employeeModel.phone);
+                                                  launch("tel://${purchaseModel[index].employeeModel.phone }");
+                                                },
+                                              ),
                                             )),
                                         Padding(
                                             padding: EdgeInsets.only(left: 40),
@@ -489,7 +496,7 @@ class _HomeState extends State<Home> {
                                                                                             purchaseController.id = purchaseModel[index].id;
                                                                                             try  {
                                                                                               purchaseController.cancelOrder().then((_){
-                                                                                                print(_);
+                                                                                                print(_);http://1e016675.ngrok.io
                                                                                                 Navigator.pop(context);
                                                                                                 purchaseModel.clear();
                                                                                                 getPurchase();
