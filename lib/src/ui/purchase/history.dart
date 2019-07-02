@@ -5,7 +5,6 @@ import 'package:prue/src/models/sale-details-model.dart';
 import '../../widgets/menu.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import '../../widgets/order.dart';
 
 class History extends StatefulWidget {
   List<PurchaseModel> purchaseModel = new List();

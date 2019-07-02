@@ -1,12 +1,8 @@
-
 import 'dart:async';
-
-import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:prue/src/ui/purchase/history.dart';
+import 'package:prue/src/ui/purchase/map.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import './src/ui/auth/recovery.dart';
 import './src/ui/auth/signIn.dart';
 import './src/ui/auth/signUp.dart';
@@ -19,7 +15,8 @@ import './src/ui/profile/profile.dart';
 import './src/ui/profile/changePassword.dart';
 import './src/ui/auth/verefication.dart';
 import './src/models/token.model.dart';
-import './src/widgets/order.dart';
+
+
 
 String _connectionStatus = 'Unknown';
 String tutorial = '';
@@ -35,8 +32,8 @@ Future<void> main() async {
     new MaterialApp(
       title: 'El niño de los burritos',
       debugShowCheckedModeBanner: false,
-      //home: Verification(),
-      home:(tokenModel.token  == null || tokenModel.token == "") ? SignIn() : (tokenModel.token  != null && tutorial == 'visto') ? Home() : Tutorial(),
+      home: Maps(),
+      //home:(tokenModel.token  == null || tokenModel.token == "") ? SignIn() : (tokenModel.token  != null && tutorial == 'visto') ? Home() : Tutorial(),
       routes: <String, WidgetBuilder>{
         '/sign-in': (BuildContext context) => new SignIn(),
         '/home': (BuildContext context) => new Home(),
@@ -50,7 +47,6 @@ Future<void> main() async {
         '/changePassword': (BuildContext context) => new changePassword(),
         '/Verification': (BuildContext context) => new Verification(),
         '/history': (BuildContext context) => new History(),
-        '/order' : (BuildContext context) => new Orders()
       },
     ),
   );
