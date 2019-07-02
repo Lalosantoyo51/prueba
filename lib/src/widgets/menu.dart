@@ -74,17 +74,14 @@ class _MainDrawerState extends State<MainDrawer> {
               isLoading
                   ? CircularProgressIndicator()
                   : Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
-                  Container(
-                    padding: EdgeInsets.fromLTRB(0, 5, 150, 0),
-
-                    child: Text(
-                      '${user.getName} ${user.getLast_Name}',
-                      style: TextStyle(
-                          fontSize: 18, fontWeight: FontWeight.bold,color:Colors.white),
-                    ),
+                  Text(
+                    '${user.getName} ${user.getLast_Name}',
+                    style: TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.bold,color:Colors.white),
                   ),
-
                   Container(
                     padding: EdgeInsets.fromLTRB(0, 0, 150, 0),
                     child: Text(
