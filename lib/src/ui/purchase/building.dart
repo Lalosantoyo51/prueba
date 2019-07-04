@@ -17,7 +17,6 @@ class Buildind extends StatefulWidget {
 class _BuildindState extends State<Buildind> {
 
   locationController _locationController = new locationController();
-  PurchaseController _purchaseController = new PurchaseController();
   CartService _cartService = new CartService();
   List<DropdownMenuItem<String>> listBuiling = [];
   List<DropdownMenuItem<String>> listoffices = [];
@@ -43,7 +42,7 @@ class _BuildindState extends State<Buildind> {
     });
   }
   goToNext(){
-    //Navigator.of(context).pushNamed('/products');
+    Navigator.of(context).pushNamed('/products');
     _cartService.setSeller_id =1;
     _cartService.setPlace_id =1;
     print(_cartService.getPlace_id);

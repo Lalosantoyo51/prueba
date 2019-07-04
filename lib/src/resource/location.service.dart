@@ -87,6 +87,7 @@ class LocationService  {
   }
 
  Future <AreaModel> getCurrentPlace(AreaModel areaModel) async{
+    print(API_URL);
    var prefs = await SharedPreferences.getInstance();
    var _data = json.encode(areaModel);
    var token = prefs.getString('access_token');
