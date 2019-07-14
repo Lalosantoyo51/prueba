@@ -1,8 +1,8 @@
 class Offices {
-  final int id;
-  final int building_id;
-  final String name;
-  final String status;
+   int id;
+   int building_id;
+   String name;
+   String status;
 
 
   Offices({this.id, this.building_id, this.name, this.status});

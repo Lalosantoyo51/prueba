@@ -1,18 +1,21 @@
 import 'package:dio/dio.dart';
+import 'package:prue/src/models/sale.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../models/provision.dart';
+import '../models/provisionDetails.dart';
 import '../utils/enviroment.dart';
 import '../models/purchase.model.dart';
+import 'dart:convert';
 
 
 class PurchaseService{
   var dio = Dio();
-  var url = '${API_URL}offices/1/provisions';
 
-  Future <List<Provision>> getProdcuts() async{
+  Future <List<ProvisionDetails>> getProdcuts(int office_id) async{
+    var url = '${API_URL}offices/$office_id/provisions';
     var prefs = await SharedPreferences.getInstance();
     var token = prefs.getString('access_token');
-    List<Provision> list_product;
+    List<ProvisionDetails> list_product;
+    print(url);
     Response response;
     response = await dio.get(url, options: RequestOptions(
         headers:{
@@ -23,8 +26,31 @@ class PurchaseService{
     ));
 
     var rest = response.data as List;
-    list_product = rest.map<Provision>((i) => Provision.fromJson(i)).toList();
+    list_product = rest.map<ProvisionDetails>((i) => ProvisionDetails.fromJson(i)).toList();
     return list_product;
+  }
+
+  Future <Sale> createSale(Sale sale) async{
+    var url = '${API_URL}sales';
+    var _data = json.encode(sale);
+    var prefs = await SharedPreferences.getInstance();
+    var token = prefs.getString('access_token');
+    print('servicio ${_data}');
+    Response response;
+    try {
+      response = await dio.post(url,data: _data, options: RequestOptions(
+          headers:{
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'X-Requested-With': 'XMLHttpRequest',
+            'authorization' : 'Bearer $token'
+          }
+      ));
+      print(response.data);
+      return Sale.fromJson(response.data);
+    } on DioError catch(e){
+      print(e.response.data);
+    }
+
   }
 
   Future <List<PurchaseModel>> history(int numberpage)async{
@@ -48,7 +74,8 @@ class PurchaseService{
   Future <List<PurchaseModel>> getOrders()async{
     var prefs = await SharedPreferences.getInstance();
     var token = prefs.getString('access_token');
-    var url = '${API_URL}users/current/orders';
+      var url = '${API_URL}users/current/orders';
+    print(url);
     Response response;
     response = await dio.get(url, options: RequestOptions(
         headers:{

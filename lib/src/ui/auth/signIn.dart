@@ -164,15 +164,16 @@ class _SignInState extends State<SignIn> {
 
       @override
   Widget build(BuildContext context) {
-    return new Scaffold(
+        double width = MediaQuery.of(context).size.width;
+
+        return new Scaffold(
         body:new Container(
           child:Center(
               child: isBussing
                   ? CircularProgressIndicator(backgroundColor: Colors.orange,)
                   : Container(
                 child: new Stack(children: <Widget>[
-                  new Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
+                  new ListView(
                     children: <Widget>[
                         new Container(
                         decoration: BoxDecoration(
@@ -186,62 +187,64 @@ class _SignInState extends State<SignIn> {
                           ),
                         ),
                         child: new Container(
-                          child: new Image.asset('assets/logo.png',scale: 2.8,
+                          child: new Image.asset('assets/user/logo.png',scale: 2.8,
                           ),
                           margin: EdgeInsets.only(bottom: 90),
                         ),
                         height: 330,
-                        width: 500,
                       ),
                     ],
                   ),
-                  new Card(
-                      margin: EdgeInsets.only(top: 200, left: 20,right: 20),
-                      elevation: 10,
-                      child: new SizedBox(
-                        height: 250,
-                        width: 325,
-                        child:  new ListView(
-                          children: <Widget>[
-                            Padding(
-                              padding: const EdgeInsets.only(
-                                  left: 28.0, right: 28.0, top: 14.0, bottom: 7.0),
-                              child: TextFormField(
-                                controller: _authController.username,
-                                decoration: const InputDecoration(
-                                    labelStyle: TextStyle(color: Colors.grey),
-                                    filled: false,
-                                    hintText: 'ingresa correo',
-                                    suffixIcon: Icon(Icons.email)),
-                                keyboardType: TextInputType.text,
-                              ),
+                  Positioned(
+                    top: 200,
+                    left: 20,
+                    right: 20,
+                    child: Card(
+                    elevation: 10,
+                    child: new SizedBox(
+                      height: 250,
+                      child:  new ListView(
+                        children: <Widget>[
+                          Padding(
+                            padding: const EdgeInsets.only(
+                                left: 28.0, right: 28.0, top: 14.0, bottom: 7.0),
+                            child: TextFormField(
+                              controller: _authController.username,
+                              decoration: const InputDecoration(
+                                  labelStyle: TextStyle(color: Colors.grey),
+                                  filled: false,
+                                  hintText: 'ingresa correo',
+                                  suffixIcon: Icon(Icons.email)),
+                              keyboardType: TextInputType.text,
                             ),
-                            new Padding(
-                              padding: const EdgeInsets.only(top: 10.0),
+                          ),
+                          new Padding(
+                            padding: const EdgeInsets.only(top: 10.0),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(
+                                left: 28.0, right: 28.0, top: 14.0, bottom: 7.0),
+                            child: TextFormField(
+                              controller: _authController.password,
+                              decoration: const InputDecoration(
+                                  labelStyle: TextStyle(color: Colors.grey),
+                                  filled: false,
+                                  hintText: 'ingresa contraseña',
+                                  suffixIcon: Icon(Icons.lock)),
+                              keyboardType: TextInputType.text,
+                              obscureText: true,
                             ),
-                            Padding(
-                              padding: const EdgeInsets.only(
-                                  left: 28.0, right: 28.0, top: 14.0, bottom: 7.0),
-                              child: TextFormField(
-                                controller: _authController.password,
-                                decoration: const InputDecoration(
-                                    labelStyle: TextStyle(color: Colors.grey),
-                                    filled: false,
-                                    hintText: 'ingresa contraseña',
-                                    suffixIcon: Icon(Icons.lock)),
-                                keyboardType: TextInputType.text,
-                                obscureText: true,
-                              ),
-                            ),
-                            new FlatButton(child: new Text('Ovidé mi contraseña',style: new TextStyle(color:Colors.black38,),),onPressed: ()=> Navigator.of(context).pushNamed('/recovery'),),
-
-                            new Padding(
-                              padding: const EdgeInsets.only(top: 40.0),
-                            ),
-                          ],
-                        ),
-                      )
-                  ),
+                          ),
+                          Padding(padding: EdgeInsets.only(right: 28,top: 10),
+                            child: GestureDetector(
+                              child: new Text('Ovidé mi contraseña',style: new TextStyle(color:Colors.black38,),textAlign: TextAlign.right,),
+                              onTap: ()=> Navigator.of(context).pushNamed('/recovery'),
+                            ),),
+                          Padding(padding: const EdgeInsets.only(top: 40.0)),
+                        ],
+                      ),
+                    ),
+                  ),),
                   new Positioned(
                     top: 420,
                     left: 50,
@@ -287,18 +290,26 @@ class _SignInState extends State<SignIn> {
                       ),
                     ),
                   ),
-                  new Positioned(
-                    top: 550,
-                    child:Container (
-                      child:  Row(
-                        children: <Widget>[
-                          Text('¿No tienes una cuenta?',),
-                          FlatButton(child: new Text('Registrarse',style: new TextStyle(color:Colors.black),),onPressed: ()=> Navigator.of(context).pushNamed('/sign-up'),)
-                        ],
-                      ),
-                      alignment: FractionalOffset(0.25,0.90),
-                      margin: EdgeInsets.only(left: 50),
-                    ),
+                  Positioned(
+                    top: 560,
+                    child:  Container(
+                      width: width,
+                      child: Center(
+                        child: GestureDetector(
+                          onTap: (){
+                            Navigator.of(context).pushNamed('/sign-up');
+                          },
+                          child: RichText(
+                            text: TextSpan(
+                              children: [
+                                TextSpan(text: '¿No tienes una cuenta?  ', style: TextStyle(fontSize: 15,color: Colors.black54,)),
+                                TextSpan(text: 'Registrarse.', style: TextStyle(fontSize: 15,color: Colors.black,fontWeight: FontWeight.bold)),
+                              ],
+                            ),
+                          )
+                        ),
+                      )
+                    )
                   ),
                 ]),
               ),

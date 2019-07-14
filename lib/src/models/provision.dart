@@ -1,25 +1,19 @@
-import '../models/product-place.model.dart';
+class Provision{
+  int id;
+  int user_id;
+  int seller_id;
+  int shift_place_id;
 
-class Provision {
-   int id;
-   int provision_id;
-   int product_place_id;
-   int quantity;
-   int availables;
-   ProductPlace product_place;
-
-  Provision({this.id, this.provision_id, this.product_place_id, this.quantity,
-    this.availables,this.product_place});
-
+  Provision({this.id,this.user_id,this.seller_id,this.shift_place_id});
   factory Provision.fromJson(Map<String, dynamic> json){
     return new Provision(
         id : json['id'],
-        product_place_id : json['product_place_id'],
-        provision_id : json['provision_id'],
-        quantity : json['quantity'],
-        availables : json['availables'],
-        product_place : new ProductPlace.fromJson(json['product_place'])
+        user_id : json['user_id'],
+        seller_id : json['seller_id'],
+        shift_place_id : json['shift_place_id'],
+
     );
   }
+
 
 }

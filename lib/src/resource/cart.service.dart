@@ -1,5 +1,5 @@
 import 'package:prue/src/models/offices.dart';
-import 'package:prue/src/models/provision.dart';
+import 'package:prue/src/models/provisionDetails.dart';
 import 'package:prue/src/models/sale.dart';
 
 
@@ -13,7 +13,7 @@ class CartService {
   static String payment;
   static String areaType;
   static Offices offices;
-  static List<Provision> provisions;
+  static List<ProvisionDetails> provisions;
 
   void set setSeller_id(int value){
     seller_id = value;
@@ -72,11 +72,11 @@ class CartService {
   Offices get getOffices{
     return offices;
   }  
-  void set setProduct(List<Provision> provision){
+  void set setProduct(List<ProvisionDetails> provision){
     provisions = provision;
   }
 
-  List<Provision> get getProduct{
+  List<ProvisionDetails> get getProduct{
     return provisions;
   }
   
@@ -86,12 +86,12 @@ class CartService {
     sale.place_id = this.getPlace_id;
     sale.office_id = 1;
     sale.payment_type = "Cash";
-    sale.product = this.getPurchasedProducts();
+    sale.products = this.getPurchasedProducts();
     return sale;
   }
 
   getPurchasedProducts(){
-    List<Provision> provision = [];
+    List<ProvisionDetails> provision = [];
     
     for(int i = 0; i < getProduct.length; i++){
       if(getProduct[i].quantity >0){

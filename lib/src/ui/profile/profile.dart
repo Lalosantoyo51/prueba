@@ -29,6 +29,8 @@ class _ProfileState extends State<Profile> {
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
     return new Scaffold(
         drawer: MainDrawer(),
     appBar: AppBar(
@@ -68,32 +70,39 @@ class _ProfileState extends State<Profile> {
             ],
           ),
           Positioned(
-            top: MediaQuery.of(context).size.height / 2 - 140.0,
+            top: MediaQuery.of(context).size.height /3.8,
             left: 12.0,
             right: 12.0,
             child: Container(
-                height: 150.0,
-                width: double.infinity,
+                height: MediaQuery
+                    .of(context)
+                    .size
+                    .height/3.8,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.all(Radius.circular(8.0)),
                   color: Colors.white,
                 ),
                 child: Card(
+                  elevation: 5.0,
                   child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.max,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
                       Padding(
                         padding: const EdgeInsets.only(
-                            left: 28.0, right: 28.0, top: 40.0,),
-                        child: Text('${user.getName} ${user.getLast_Name}',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 30, color: Colors.orange),)
+                            left: 28.0, right: 28.0,),
+                        child: Text('${user.getName} ${user.getLast_Name}',style: TextStyle(fontWeight: FontWeight.bold,fontSize: width/13, color: Colors.orange),)
                       ),
                       Padding(
                         padding: const EdgeInsets.only(
                             left: 28.0, right: 28.0, top: 15.0),
-                        child: Text('${fecha}',style: TextStyle(fontWeight: FontWeight.bold,))
+                        child: Text('${fecha}',style: TextStyle(fontWeight: FontWeight.bold,fontSize: width/18))
                       ),
                     ],
                   ),
-                )),
+                )
+            ),
           ),
           Positioned(
             right: 24.0,
@@ -131,13 +140,15 @@ class _ProfileState extends State<Profile> {
           Positioned(
             right: 24.0,
             left: 24.0,
-            bottom: 320,
-            child: CircleAvatar(
-              radius: 75.0,
-              child: new Image.asset("assets/user/${user.getGender}.png",
-                width: 200,
-                height: 200,),
-            ),
+            top: height/15,
+            child: Container(
+              width: width,
+              height: height/4,
+              child: CircleAvatar(
+                radius: width/5,
+                child: new Image.asset("assets/user/${user.getGender}.png",),
+              ),
+            )
           ),
 
           Positioned(

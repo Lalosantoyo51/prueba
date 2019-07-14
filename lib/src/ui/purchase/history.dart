@@ -51,6 +51,8 @@ class _HistoryState extends State<History> {
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: AppBar(
         title: Text('Historial'),
@@ -66,6 +68,8 @@ class _HistoryState extends State<History> {
               itemCount: purchaseModel.length,
               itemBuilder: (BuildContext context, int index) {
                 return Container(
+                    height: height/3,
+                    width: width,
                     child: Padding(
                         padding: EdgeInsets.only(left: 20, right: 20, top: 10),
                         child: Card(
@@ -73,12 +77,12 @@ class _HistoryState extends State<History> {
                               children: <Widget>[
                                 Image.asset(
                                   "assets/orders/${src[index]}",
-                                  width: 100,
+                                  width: width/3,
                                 ),
                                 Padding(
                                   padding: EdgeInsets.only(
                                     top: 10,
-                                    left: 110,
+                                    left: width/3,
                                   ),
                                   child: Column(
                                     children: <Widget>[
@@ -87,7 +91,8 @@ class _HistoryState extends State<History> {
                                             child: Text(
                                               '${titles[index]}',
                                               style: TextStyle(
-                                                  fontSize: 20, color: Colors.black),
+                                                  fontSize: width/15,
+                                                  color: Colors.black),
                                             ),
                                             alignment: Alignment.topLeft,
                                           )),
@@ -95,7 +100,8 @@ class _HistoryState extends State<History> {
                                         alignment: Alignment.topLeft,
                                         child: Text(
                                           'Pedido #${purchaseModel[index].id + 1000}',
-                                          style: TextStyle(color: Colors.black38),
+                                          style: TextStyle(color: Colors.black38,
+                                              fontSize: width/24),
                                         ),
                                       ),
                                       Align(
@@ -105,7 +111,8 @@ class _HistoryState extends State<History> {
                                               "yyyy-MM-dd HH:mm:ss")
                                               .parse(
                                               purchaseModel[index].created_at)),
-                                          style: TextStyle(color: Colors.black54),
+                                          style: TextStyle(color: Colors.black38,
+                                              fontSize: width/24),
                                         ),
                                       ) , purchaseModel[index].status == 'Order' ?
                                       Align(
@@ -116,12 +123,14 @@ class _HistoryState extends State<History> {
                                       Align(
                                         alignment: Alignment.topLeft,
                                         child: Text('Orden completa',
-                                          style: TextStyle(color: Colors.black38),),
+                                          style: TextStyle(color: Colors.black38,
+                                              fontSize: width/24),),
                                       ):purchaseModel[index].status =='Rejected' ?
                                       Align(
                                         alignment: Alignment.topLeft,
                                         child: Text('Orden cancelada',
-                                          style: TextStyle(color: Colors.black38),),
+                                          style: TextStyle(color: Colors.black38,
+                                              fontSize: width/24),),
                                       ):
                                       Container(),
                                       purchaseModel[index].place_user.name == null && purchaseModel[index].offices.name != null  ?
@@ -129,65 +138,70 @@ class _HistoryState extends State<History> {
                                           alignment: Alignment.topLeft,
                                           child:
                                           Text('${purchaseModel[index].offices.buildin.name} ${purchaseModel[index].offices.name}',
-                                            style: TextStyle(color: Colors.black38),)
+                                            style: TextStyle(color: Colors.black38,
+                                                fontSize: width/24),)
                                       ):purchaseModel[index].place_user.name != null && purchaseModel[index].offices.name == null  ?
                                       Align(
                                           alignment: Alignment.topLeft,
                                           child:
                                           Text('${purchaseModel[index].place_user.name} ',
-                                            style: TextStyle(color: Colors.black38),)
+                                            style: TextStyle(color: Colors.black38,
+                                                fontSize: width/24),)
                                       ):Align(
                                           alignment: Alignment.topLeft,
                                           child:
                                           Text('tu ubicacion actual',
-                                            style: TextStyle(color: Colors.black38),)
+                                            style: TextStyle(color: Colors.black38,fontSize: width/24),)
                                       )
                                     ],
                                   ),
                                 ),
                                 Padding(
                                     padding: EdgeInsets.only(
-                                        top: 110, left: 10, right: 10),
+                                        top: height/4.5, left: 10, right: 10),
                                     child: Container(
                                       height: 1,
-                                      width: 300,
+                                      width: width,
                                       color: Colors.black12,
                                     )),
                                 Padding(
                                     padding: EdgeInsets.only(
-                                        top: 110, left: 15, right: 10),
+                                        top: height/4.3, left: 15, right: 10),
                                     child: Row(
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      mainAxisSize: MainAxisSize.max,
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: <Widget>[
                                         Padding(
                                           padding: EdgeInsets.only(
-                                            top: 20,
-                                            bottom: 20,
+                                            bottom: 10,
                                           ),
                                           child: Container(
-                                            width: 80,
+                                            width: width/4,
                                             child: Text(r"$" +'${formatter.format(purchaseModel[index].cost)}',
                                                 style: TextStyle(
-                                                    fontSize: 20,
-                                                    color: Colors.orange,
+                                                    fontSize: height/24,                                                    color: Colors.orange,
                                                     fontWeight: FontWeight.bold)),
                                           )),
                                         purchaseModel[index].status == 'Delivered' && purchaseModel[index].qualified_by_customer == 'Unrated' ?
                                         Padding(
-                                            padding: EdgeInsets.only(left: 10),
+                                            padding: EdgeInsets.only(left: 0),
                                             child: FlatButton(
                                               child: Icon(
                                                 Icons.star,
                                                 color: Colors.orange,
+                                                size: height/22,
                                               ),)):Padding(
-                                            padding: EdgeInsets.only(left: 10),
+                                            padding: EdgeInsets.only(left:0),
                                             child: FlatButton(
                                               child: Container(),)),
                                         Padding(
-                                            padding: EdgeInsets.only(left: 10),
+                                            padding: EdgeInsets.only(left: 0),
                                             child: FlatButton(
                                                 child: Icon(
                                                   Icons.info_outline,
                                                   color: Colors.orange,
+                                                  size: height/22,
                                                 ),
                                                 color: Colors.white,
                                                 onPressed: () {

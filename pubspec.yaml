@@ -10,7 +10,7 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.2
   location: ^2.3.0
-  dio: ^2.1.0
+  dio: ^2.1.12
   http: ^0.12.0+1
   shared_preferences: ^0.5.1+1
   datetime_picker_formfield: ^0.1.8
@@ -31,6 +31,11 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
+flutter_icons:
+  android: false
+  ios: true
+  image_path: "assets/iconApp.png"
+
 
 # For information on the generic Dart part of this file, see the
 # following page: https://www.dartlang.org/tools/pub/pubspec
@@ -49,6 +54,7 @@ flutter:
   #  - images/a_dot_ham.jpeg
   assets:
     - assets/logo.png
+    - assets/user/logo.png
     - success.png
     - assets/tutorial/1.png
     - assets/tutorial/2.png

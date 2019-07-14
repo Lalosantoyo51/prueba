@@ -12,8 +12,8 @@ class AreaModel implements LocationModel{
     this.message});
 
   Map toJson() => {
-    'lat': this.lat,
-    'lng': this.lng,
+    'lat' : this.lat,
+    'lng' : this.lng
   };
 
   AreaModel.fromJson(Map<String, dynamic> json)

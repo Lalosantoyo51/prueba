@@ -71,12 +71,14 @@ class _RecoveryState extends State<Recovery> {
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+
     return new Scaffold(
-      body: new Stack(children: <Widget>[
-        new Column(
-          mainAxisAlignment: MainAxisAlignment.start,
+      body: Stack(
           children: <Widget>[
-            new Container(
+            ListView(
+              children: <Widget>[
+                new Container(
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   begin: Alignment.bottomLeft,
@@ -97,59 +99,67 @@ class _RecoveryState extends State<Recovery> {
             ),
           ],
         ),
-        new Card(
+        Container(
+          height: 370,
+          child:  Card(
             margin: EdgeInsets.only(top: 200, left: 20,right: 20),
             elevation: 10,
-            child: new SizedBox(
-              height: 250,
-              width: 325,
-              child:  new ListView(
-                children: <Widget>[
-                  new Container(
-                    margin: EdgeInsets.only(left: 10, right: 10),
-                    child: new TextField(
-                      controller: _authController.email,
-                      decoration: new InputDecoration(
-                        icon: new Icon(Icons.email),
-                        labelText: "ingresa correo",
-                        hintStyle: TextStyle(color: Colors.orangeAccent),
+            child:  Container(
+                margin: EdgeInsets.only(left: 10, right: 10,bottom: 30),
+                child:  Center(
+                  child: TextField(
+                    controller: _authController.email,
+                    decoration: new InputDecoration(
+                      icon: new Icon(Icons.email),
+                      labelText: "ingresa correo",
+                      hintStyle: TextStyle(color: Colors.orangeAccent),
+                    ),
+                  ),
+                )
+            ),
+          ),
+        ),
+            Positioned(
+                top: 340,
+                right: 30,
+                left: 30,
+                child:Container(
+                  child: Center(
+                    child:Container(
+                      width: width,
+                      child: new MaterialButton(
+                        onPressed: login,
+                        color: Colors.orangeAccent,
+                        splashColor: Colors.deepOrangeAccent,
+                        textColor: Colors.white,
+                        child: new Text("Recuperar", style: new TextStyle(
+                            color: Colors.white,
+                            fontSize: 20
+                        ),),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
                       ),
                     ),
-
                   ),
-
-                  new Padding(
-                    padding: const EdgeInsets.only(top: 40.0),
-                  ),
-
-                  new Container(
-                    margin: EdgeInsets.only(left: 30, right: 30),
-                    child: new MaterialButton(
-                      onPressed: login,
-                      height: 50.0,
-                      color: Colors.orangeAccent,
-                      splashColor: Colors.deepOrangeAccent,
-                      textColor: Colors.white,
-                      child: new Text("Recuperar", style: new TextStyle(
-                          color: Colors.white,
-                          fontSize: 20
-                      ),),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                ),
+            ),
+            Positioned(
+                top: 430,
+                child: Container(
+                  width: width,
+                  child: Center(
+                    child: GestureDetector(
+                      onTap: (){
+                        Navigator.of(context).pushNamed('/sign-in');
+                      },
+                      child: Text('Cancelar' ,
+                          textAlign: TextAlign.center,style: new TextStyle(
+                            fontSize: 18,
+                              color: Colors.black38,fontWeight: FontWeight.bold)
+                      ),
                     ),
                   ),
-
-                  new Padding(
-                    padding: const EdgeInsets.only(top: 40.0),
-                  ),
-
-                  new Text('Cancelar' , textAlign: TextAlign.center,style: new TextStyle(
-                    color: Colors.black38
-                  ),)
-                ],
-              ),
+                ),
             )
-        ),
-
       ]),
     );
 

@@ -8,7 +8,6 @@ import '../models/location.model.dart';
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../models/messageResponse.dart';
-import '../models/areaResponse.dart';
 import '../models/building.model.dart';
 
 
@@ -68,14 +67,15 @@ class LocationService  {
       }
       location = null;
     }
-
   }
 
-  Future <MessageResponse> getMessage()async{
+  Future <MessageResponse> getMessage(int id)async{
     var prefs = await SharedPreferences.getInstance();
     var token = prefs.getString('access_token');
-    var url = '${API_URL}places/${prefs.getInt('place_id')}/message';
+    var url = '${API_URL}places/$id/message';
+    print(url);
     Response response;
+    try {
     response = await dio.get(url, options: RequestOptions(
         headers:{
           'Content-Type': 'application/x-www-form-urlencoded',
@@ -83,17 +83,26 @@ class LocationService  {
           'authorization' : 'Bearer $token'
         }
     ));
-    return MessageResponse.fromJson(response.data);
+    if(response.data.toString().length > 0){
+      return MessageResponse.fromJson(response.data);
+    }
+    }on DioError catch (e) {
+      print(e.response.data);
+      return MessageResponse.fromJson(e.response.data);
+
+    }
+
   }
 
  Future <AreaModel> getCurrentPlace(AreaModel areaModel) async{
     print(API_URL);
    var prefs = await SharedPreferences.getInstance();
-   var _data = json.encode(areaModel);
+   var _data =  {"coordinate" : json.encode(areaModel)};
    var token = prefs.getString('access_token');
     var url = '${API_URL}users/current/place';
-    print(_data);
+    print('location ${_data}');
     Response response;
+    try {
     response = await dio.post(url, data:_data , options: RequestOptions(
         headers:{
           'Content-Type': 'application/x-www-form-urlencoded',
@@ -101,16 +110,20 @@ class LocationService  {
           'authorization' : 'Bearer $token'
         }
     ));
-    prefs.setInt('place_id', response.data['id']);
     return AreaModel.fromJson(response.data);
+    }on DioError catch (e) {
+      print(e.response.data);
+      return AreaModel.fromJson(e.response.data);
 
+    }
  }
 
   Future <List<Building>> getBuildings(int id)async{
      List<Building> list_buildin;
      var prefs = await SharedPreferences.getInstance();
      var token = prefs.getString('access_token');
-    var url = '${API_URL}places/$id}/buildings';
+    var url = '${API_URL}places/$id/buildings';
+    print(url);
       Response response;
       response = await dio.get(url, options: RequestOptions(
           headers:{

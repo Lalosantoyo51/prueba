@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:prue/src/ui/purchase/history.dart';
 import 'package:prue/src/ui/purchase/map.dart';
+import 'package:prue/src/ui/purchase/payment.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import './src/ui/auth/recovery.dart';
 import './src/ui/auth/signIn.dart';
@@ -32,7 +33,7 @@ Future<void> main() async {
     new MaterialApp(
       title: 'El niño de los burritos',
       debugShowCheckedModeBanner: false,
-      //home: Maps(),
+      //home: Payment(),
       home:(tokenModel.token  == null || tokenModel.token == "") ? SignIn() : (tokenModel.token  != null && tutorial == 'visto') ? Home() : Tutorial(),
       routes: <String, WidgetBuilder>{
         '/sign-in': (BuildContext context) => new SignIn(),
@@ -47,6 +48,7 @@ Future<void> main() async {
         '/changePassword': (BuildContext context) => new changePassword(),
         '/Verification': (BuildContext context) => new Verification(),
         '/history': (BuildContext context) => new History(),
+        '/payment': (BuildContext context) => new Payment(),
       },
     ),
   );

@@ -3,7 +3,7 @@ import 'package:prue/src/bloc/location.controller.dart';
 import 'package:prue/src/models/building.model.dart';
 import 'package:prue/src/models/buildingResponse.dart';
 import 'package:prue/src/models/offices.dart';
-import 'package:prue/src/models/provision.dart';
+import 'package:prue/src/models/provisionDetails.dart';
 import 'package:prue/src/widgets/stepperW.dart';
 import '../../bloc/purchaseController.dart';
 import '../../models/cart.model.dart';
@@ -17,18 +17,23 @@ class Buildind extends StatefulWidget {
 class _BuildindState extends State<Buildind> {
 
   locationController _locationController = new locationController();
-  CartService _cartService = new CartService();
+  CartModel cart = new CartModel();
   List<DropdownMenuItem<String>> listBuiling = [];
   List<DropdownMenuItem<String>> listoffices = [];
   String selected_buildign = null;
   String selected_offices = null;
   List <Building> buildings;
   List<Offices> offices;
-  List<Provision> provisions = new List();
+  List<ProvisionDetails> provisions = new List();
   @override
   void initState() {
     _locationController.getBuilding().then((List<Building> buildings ){
       this.buildings = buildings;
+      buildings.forEach((building){
+        building.offices.forEach((office){
+
+        });
+      });
       setState(() {
         listBuiling = [];
         selected_buildign;
@@ -43,10 +48,7 @@ class _BuildindState extends State<Buildind> {
   }
   goToNext(){
     Navigator.of(context).pushNamed('/products');
-    _cartService.setSeller_id =1;
-    _cartService.setPlace_id =1;
-    print(_cartService.getPlace_id);
-    print(_cartService.getSeller_id);
+    cart.setOffice_id = int.parse(selected_offices);
 
   }
 
@@ -56,6 +58,9 @@ class _BuildindState extends State<Buildind> {
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
+
     return new Scaffold(
       appBar: AppBar(
         title: new Text('inicio'),
@@ -102,6 +107,7 @@ class _BuildindState extends State<Buildind> {
                             ),
                           ),
                           onChanged: (value){
+
                             setState(() {
                               selected_offices = null;
                               selected_buildign = value;
@@ -115,6 +121,7 @@ class _BuildindState extends State<Buildind> {
                                 ));
                               });
                             });
+
                           },
                         ),),
                         Padding(padding: EdgeInsets.only(left: 40,top: 20,right: 40),
@@ -129,6 +136,7 @@ class _BuildindState extends State<Buildind> {
                             ],
                           ),
                           onChanged: (value){
+                            print(value);
                             selected_offices = value;
                             setState(() {
 
@@ -143,44 +151,50 @@ class _BuildindState extends State<Buildind> {
                     bottom: 5,
                     left: 5,
                     right: 5,
-                    child: Row(
-                      children: <Widget>[
-                        GestureDetector(
-                          child: Container(
-                            color: Colors.orange,
-                            child: Center(
-                              child: Text('Cancelar',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 15,
-                                fontWeight: FontWeight.bold
-                              ),),
+                    child: Container(
+                      width: width,
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          GestureDetector(
+                            child: Container(
+                              color: Colors.orange,
+                              child: Center(
+                                child: Text('Cancelar',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold
+                                  ),),
+                              ),
+                              height: 50,
+                              width: width/2.2,
                             ),
-                            width: 150,
-                            height: 50,
+                            onTap: (){
+                              goToNext();
+                            },
                           ),
-                          onTap: (){
-                            goToNext();
-                          },
-                        ),
-                        GestureDetector(
-                          child: Container(
-                            margin: EdgeInsets.only(left: 50),
-                            color: Colors.orange,
-                            child: Center(
-                              child: Text('Elegir productos',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.bold
-                              ),),
+                          GestureDetector(
+                            child: Container(
+                              margin: EdgeInsets.only(left: 10),
+                              color: Colors.orange,
+                              child: Center(
+                                child: Text('Elegir productos',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold
+                                  ),),
+                              ),
+                              height: 50,
+                              width: width/2.2,
                             ),
-                            width: 150,
-                            height: 50,
                           ),
-                        ),
 
-                      ],
+                        ],
+                      ),
                     )
                 )
               ],
