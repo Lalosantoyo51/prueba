@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class LoadingAlert extends StatefulWidget {
+  String messageAler;
+  LoadingAlert(this.messageAler);
   @override
   _LoadingAlertState createState() => _LoadingAlertState();
 }
@@ -26,7 +28,7 @@ class _LoadingAlertState extends State<LoadingAlert> {
             ),
             Container(
               child: Text(
-                "   Cargando...",
+                "    ${widget.messageAler}",
                 style: TextStyle(),
                 overflow: TextOverflow.ellipsis,
               ),

@@ -17,17 +17,21 @@ class PurchaseService{
     List<ProvisionDetails> list_product;
     print(url);
     Response response;
-    response = await dio.get(url, options: RequestOptions(
-        headers:{
-          'Content-Type': 'application/x-www-form-urlencoded',
-          'X-Requested-With': 'XMLHttpRequest',
-          'authorization' : 'Bearer $token'
-        }
-    ));
+    try{
+      response = await dio.get(url, options: RequestOptions(
+          headers:{
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'X-Requested-With': 'XMLHttpRequest',
+            'authorization' : 'Bearer $token'
+          }
+      ));
 
-    var rest = response.data as List;
-    list_product = rest.map<ProvisionDetails>((i) => ProvisionDetails.fromJson(i)).toList();
-    return list_product;
+      var rest = response.data as List;
+      list_product = rest.map<ProvisionDetails>((i) => ProvisionDetails.fromJson(i)).toList();
+      return list_product;
+    }on DioError catch(e){
+      print('sdsadsa');
+    }
   }
 
   Future <Sale> createSale(Sale sale) async{
@@ -58,17 +62,21 @@ class PurchaseService{
     var token = prefs.getString('access_token');
     var url = '${API_URL}users/current/purchases?page=$numberpage';
     Response response;
-    response = await dio.get(url, options: RequestOptions(
-        headers:{
-          'Content-Type': 'application/x-www-form-urlencoded',
-          'X-Requested-With': 'XMLHttpRequest',
-          'authorization' : 'Bearer $token'
-        }
-    ));
-    print(response.data['data'][0]);
-    var data =
-    (response.data['data'] as List).map((data) => PurchaseModel.fromJson(data)).toList();
-    return data;
+    try {
+      response = await dio.get(url, options: RequestOptions(
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'X-Requested-With': 'XMLHttpRequest',
+            'authorization': 'Bearer $token'
+          }
+      ));
+      var data =
+      (response.data['data'] as List).map((data) =>
+          PurchaseModel.fromJson(data)).toList();
+      return data;
+    }on DioError catch(e){
+      print(e.response.data);
+    }
   }
 
   Future <List<PurchaseModel>> getOrders()async{

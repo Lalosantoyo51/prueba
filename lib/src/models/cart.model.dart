@@ -6,6 +6,7 @@ import './produc.model.dart';
 class CartModel {
   static int seller_id;
   static int total;
+  static int totalproduct;
   static int place_id;
   static int latitude;
   static int longitude;
@@ -72,6 +73,12 @@ class CartModel {
   int get getTotal{
     return user_id;
   }
+  void set setTotalproduct(int value){
+    totalproduct = value;
+  }
+  int get getTotalproduct{
+    return total;
+  }
   void set setPayment(String value){
     payment = value;
   }
@@ -110,7 +117,7 @@ class CartModel {
   }
    getPurchasedProducts(){
     CartModel.products.forEach((product){
-      print(product.name);
+      //print('model cart ${product.name}');
     });
     return CartModel.products;
    }

@@ -112,7 +112,7 @@ class _MainDrawerState extends State<MainDrawer> {
       children: <Widget>[
         createDrawerItems("Inicio", home, '/home'),
         createDrawerItems("Historial", history, '/history'),
-        createDrawerItems("My perfil", profile, '/profile'),
+        createDrawerItems("Mi perfil", profile, '/profile'),
         createDrawerItems("Acerca de ", about, '/about'),
 
 

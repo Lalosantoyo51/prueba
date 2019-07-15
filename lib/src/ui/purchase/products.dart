@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:prue/src/models/produc.model.dart';
 import 'package:prue/src/models/sale.dart';
+import 'package:prue/src/widgets/loadingAlert.dart';
+import 'package:prue/src/widgets/menu.dart';
 import 'package:prue/src/widgets/stepperW.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 import '../../models/provisionDetails.dart';
 import '../../bloc/purchaseController.dart';
 import '../../models/cart.model.dart';
@@ -19,27 +22,47 @@ class _ProductsState extends State<Products> {
   Sale sale = new Sale();
   List <ProvisionDetails> provisionDestils = new List();
   List <ProductModel> product = new List();
+  bool isloading = true;
+  String error;
+
+  _onAlertButtonError(context){
+    Alert(
+      context: context,
+      type: AlertType.warning,
+      title: "Advertencia",
+      desc: "$error",
+      buttons: [
+        DialogButton(
+          color: Colors.orange,
+          child: Text(
+            "Aceptar",
+            style: TextStyle(color: Colors.white, fontSize: 20),
+          ),
+          onPressed: () => Navigator.pop(context),
+          width: 120,
+        )
+      ],
+    ).show();
+  }
 
 
 
-
-   @override
+  @override
    void initState() {
      getProducts();
    }
    getProducts() async{
-     print('sdasd');
      await purchaseController.getProducts().then((List<ProvisionDetails> provisionDestils){
 
        setState(() {
          this.provisionDestils = provisionDestils;
+         if(provisionDestils.length >0){
+           isloading =false;
+         }
        });
        this.provisionDestils.forEach((provisionDestil){
          provisionDestil.product_place.product.provision_detail_id = provisionDestil.id;
          provisionDestil.product_place.product.product_place_id = provisionDestil.product_place_id;
-         print('product place id ${provisionDestil.product_place.product.product_place_id}');
-         print('provicion detail ${provisionDestil.product_place.product.provision_detail_id}');
-
          cart.setSeller_id = provisionDestil.provision.seller_id;
          setState(() {
            provisionDestil.product_place.product.value = 0;
@@ -47,21 +70,20 @@ class _ProductsState extends State<Products> {
        });
      });
    }
+  goToBack(){
+    Navigator.pop(context);
+  }
+
    next(){
-     Navigator.of(context).pushNamed('/payment');
-   }
-   prue(){
      var total = 0;
+     var totalProduct = 0;
      product.clear();
      provisionDestils.forEach((provision){
        if(provision.product_place.product.value > 0 ){
-         print('cost ${provision.product_place.cost}');
          product.add(provision.product_place.product);
          total = total + (provision.product_place.cost * provision.product_place.product.value);
-         print('total: ${total}');
          cart.setTotal = total;
        }
-
        cart.setProducts = product;
        purchaseController.sale.place_id  = cart.getPlace_id;
        purchaseController.sale.employee_id = cart.getSeller_id;
@@ -73,20 +95,20 @@ class _ProductsState extends State<Products> {
        });
 
      });
-     print('id del lugar${purchaseController.sale.place_id}');
-     print('id del empleado${purchaseController.sale.employee_id}');
-     print('tipo de pago${purchaseController.sale.payment_type}');
-     print('id de la oficina${purchaseController.sale.office_id}');
-
      purchaseController.sale.products.forEach((product){
-       print(product.product_place_id);
-       print(product.name);
-       print(product.value);
-       print(product.provision_detail_id);
+       totalProduct = totalProduct + product.value;
      });
-     Navigator.of(context).pushNamed('/payment');
-
-
+     if(totalProduct >0){
+       if(totalProduct < 11){
+         Navigator.of(context).pushNamed('/payment');
+       }else{
+         error = "Solo puedes comprar 10";
+         _onAlertButtonError(context);
+       }
+     }else{
+       error = 'No has seleccionado tus productos';
+       _onAlertButtonError(context);
+     }
   }
    @override
   Widget build(BuildContext context) {
@@ -98,7 +120,10 @@ class _ProductsState extends State<Products> {
           centerTitle: true,
           backgroundColor: Colors.orange,
         ),
-      body:Theme(
+        drawer: MainDrawer(),
+      body:isloading == true ?Container(
+        child: LoadingAlert('Cargando Productos...'),
+      ):Theme(
           data: ThemeData(
               primaryColor: Colors.orange
           ),
@@ -225,9 +250,7 @@ class _ProductsState extends State<Products> {
                           height: 50,
                           width: width/2.2,
                         ),
-                        onTap: (){
-                          prue();
-                        },
+                        onTap: goToBack,
                       ),
                       GestureDetector(
                         onTap: next,

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:prue/src/ui/purchase/confirm.dart';
 import 'package:prue/src/ui/purchase/history.dart';
 import 'package:prue/src/ui/purchase/map.dart';
 import 'package:prue/src/ui/purchase/payment.dart';
@@ -49,6 +50,7 @@ Future<void> main() async {
         '/Verification': (BuildContext context) => new Verification(),
         '/history': (BuildContext context) => new History(),
         '/payment': (BuildContext context) => new Payment(),
+        '/confirm': (BuildContext context) => new Confirm(),
       },
     ),
   );

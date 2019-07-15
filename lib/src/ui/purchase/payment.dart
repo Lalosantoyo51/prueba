@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:prue/src/models/cart.model.dart';
+import 'package:prue/src/widgets/menu.dart';
 import 'package:prue/src/widgets/stepperW.dart';
 import 'package:intl/intl.dart';
 
@@ -13,146 +14,74 @@ class _PaymentState extends State<Payment> {
   CartModel cart = new CartModel();
   final formatter = new NumberFormat("0.00");
 
+  goTONext(){
+    Navigator.of(context).pushNamed('/confirm');
+  }
+  goToBack(){
+    Navigator.pop(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     return Scaffold(
         appBar: AppBar(
-          title: new Text('Confirmar'),
+          title: new Text('Metodo de pago'),
           centerTitle: true,
           backgroundColor: Colors.orange,
         ),
+        drawer: MainDrawer(),
         body: Theme(
             data: ThemeData(primaryColor: Colors.orange),
             child: Stack(
               children: <Widget>[
                 Padding(
                   padding: EdgeInsets.only(top: 20),
-                  child: StepperW(4),
+                  child: StepperW(3),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(top: 90, left: 10, right: 10,bottom: height/4),
-                  child: Container(
-                    width: width,
-                    child: Card(
+                    padding: EdgeInsets.only(
+                        top: 90, left: 10, right: 10, bottom: height / 4),
+                    child: Container(
+                      width: width,
+                      child: Card(
                         elevation: 5.0,
-                        child: Stack(
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          mainAxisSize: MainAxisSize.max,
                           children: <Widget>[
-                            Padding(
-                              padding:
-                                  EdgeInsets.only(top: 15, left: 10, right: 10),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                mainAxisSize: MainAxisSize.max,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: <Widget>[
-                                  Container(
-                                    width: width / 5,
-                                    child: Text(
-                                      'Cantidad',
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ),
-                                  Container(
-                                    width: width / 5,
-                                    child: Text('Producto',
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold)),
-                                  ),
-                                  Container(
-                                    width: width / 5,
-                                    child: Text('Pre. Unit',
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold)),
-                                  ),
-                                  Container(
-                                    width: width / 5,
-                                    child: Text('Importe',
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold)),
-                                  ),
-                                ],
-                              ),
+                            GestureDetector(
+                              child: Text('Efectivo'),
                             ),
-                            Padding(padding: EdgeInsets.only(top: 45,bottom: 50),child:
-                            ListView.builder(
-                                itemCount: cart.cart.products.length,
-                                itemBuilder: (BuildContext context, int index){
-                                  return Padding(
-                                    padding:
-                                    EdgeInsets.only(top: 5, left: 10, right: 10),
-                                    child:
-                                    Column(
-                                      children: <Widget>[
-                                        Row(
-                                          mainAxisSize: MainAxisSize.max,
-                                          crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                          mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                          children: <Widget>[
-                                            Container(
-                                              width: width / 5,
-                                              child: Text(
-                                                '${cart.cart.products[index].value}',
-                                                textAlign: TextAlign.center,
-                                              ),
-                                            ),
-                                            Container(
-                                              width: width / 5,
-                                              child: Text(
-                                                '${cart.cart.products[index].name}',
-                                                textAlign: TextAlign.center,
-                                              ),
-                                            ),
-                                            Container(
-                                              width: width / 5,
-                                              child: Text(
-                                                r'$' + "${cart.cart.products[index].cost}",
-                                                textAlign: TextAlign.center,
-                                              ),
-                                            ),
-                                            Container(
-                                              width: width / 5,
-                                              child: Text(
-                                                r'$'+"${cart.cart.products[index].cost * cart.cart.products[index].value}",
-                                                textAlign: TextAlign.center,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        Padding(padding: EdgeInsets.only(top: 1)),
-                                      ],
-                                    ),
-                                  );
-                                }),
+                            GestureDetector(
+                              child: Text('Tarjeta'),
                             ),
-                            Padding(padding: EdgeInsets.only(top: height/2.4,left: 20,right: 20),
-                                child: Column(
-                                  children: <Widget>[
-                                    Container(height: 1,color: Colors.black26,),
-                                    Padding(padding: EdgeInsets.only(top: 10)),
-                                    Container(width: width,
-                                    child: Text(r'Total $' + '${formatter.format(cart.getTotal)}',
-                                      style: TextStyle(fontSize: height/32,
-                                          fontWeight: FontWeight.bold,
-                                        color: Colors.orange
-                                      ),
-                                      textAlign: TextAlign.right,
-                                    ),)
-                                  ],
-                                ))
                           ],
-                        )),
-                  ),
-                ),
+                        ),
+                      ),
+                    )),
+                Padding(
+                    padding: EdgeInsets.only(
+                        top: 150, left: 10, right: 10, bottom: height / 4),
+                    child: Container(
+                      width: width,
+                      child: Card(
+                        elevation: 5.0,
+
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            Text(r"Cantidad a pagar: $" + "${formatter.format(cart.getTotal)}"),
+                            Container(
+                              width: width/1.3,
+                              child: Text('Prepara tu efectivo y entregalo al vendedor una vez te sea llevado el pedido.',),
+                            )
+                          ],
+                        ),
+                      ),
+                    )),
                 Positioned(
                     bottom: 5,
                     left: 5,
@@ -176,18 +105,17 @@ class _PaymentState extends State<Payment> {
                                   ),),
                               ),
                               height: 50,
-                              width: width/2.2,
+                              width: width / 2.2,
                             ),
-                            onTap: (){
-
-                            },
+                            onTap: goToBack,
                           ),
                           GestureDetector(
+                            onTap: goTONext,
                             child: Container(
                               margin: EdgeInsets.only(left: 10),
-                              color: Colors.green,
+                              color: Colors.orange,
                               child: Center(
-                                child: Text('Confirmar',
+                                child: Text('Verificar compra',
                                   style: TextStyle(
                                       color: Colors.white,
                                       fontSize: 15,
@@ -195,10 +123,9 @@ class _PaymentState extends State<Payment> {
                                   ),),
                               ),
                               height: 50,
-                              width: width/2.2,
+                              width: width / 2.2,
                             ),
                           ),
-
                         ],
                       ),
                     )

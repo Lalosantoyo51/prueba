@@ -4,7 +4,10 @@ import 'package:prue/src/models/building.model.dart';
 import 'package:prue/src/models/buildingResponse.dart';
 import 'package:prue/src/models/offices.dart';
 import 'package:prue/src/models/provisionDetails.dart';
+import 'package:prue/src/widgets/loadingAlert.dart';
+import 'package:prue/src/widgets/menu.dart';
 import 'package:prue/src/widgets/stepperW.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 import '../../bloc/purchaseController.dart';
 import '../../models/cart.model.dart';
 import '../../resource/cart.service.dart';
@@ -15,7 +18,7 @@ class Buildind extends StatefulWidget {
 }
 
 class _BuildindState extends State<Buildind> {
-
+  PurchaseController  purchaseController = new PurchaseController();
   locationController _locationController = new locationController();
   CartModel cart = new CartModel();
   List<DropdownMenuItem<String>> listBuiling = [];
@@ -25,6 +28,9 @@ class _BuildindState extends State<Buildind> {
   List <Building> buildings;
   List<Offices> offices;
   List<ProvisionDetails> provisions = new List();
+  bool isloading = true;
+  String error;
+
   @override
   void initState() {
     _locationController.getBuilding().then((List<Building> buildings ){
@@ -37,6 +43,11 @@ class _BuildindState extends State<Buildind> {
       setState(() {
         listBuiling = [];
         selected_buildign;
+        if(this.buildings.length > 0){
+          setState(() {
+            isloading = false;
+          });
+        }
         this.buildings.forEach((building){
           listBuiling.add(new DropdownMenuItem(
               child: new Text('${building.name}') ,
@@ -46,10 +57,51 @@ class _BuildindState extends State<Buildind> {
       });
     });
   }
-  goToNext(){
-    Navigator.of(context).pushNamed('/products');
-    cart.setOffice_id = int.parse(selected_offices);
+  _onAlertButtonError(context){
+    Alert(
+      context: context,
+      type: AlertType.warning,
+      title: "Advertencia",
+      desc: "$error",
+      buttons: [
+        DialogButton(
+          color: Colors.orange,
+          child: Text(
+            "Aceptar",
+            style: TextStyle(color: Colors.white, fontSize: 20),
+          ),
+          onPressed: () => Navigator.pop(context),
+          width: 120,
+        )
+      ],
+    ).show();
+  }
 
+  goToNext(){
+
+    if(selected_buildign == null){
+      print('Hey! Amigo burrero, elige el edificio al cual te llevaré tu pedido.');
+      error = "Hey! Amigo burrero, elige el edificio al cual te llevaré tu pedido.";
+      _onAlertButtonError(context);
+    }else if(selected_offices == null){
+      error = "Hey! Amigo burrero, elige la oficina a la cual te llevaré tu pedido.";
+      _onAlertButtonError(context);
+    }else {
+      cart.setOffice_id = int.parse(selected_offices);
+      purchaseController.getProducts().then((List<ProvisionDetails> provisionDetails){
+        print(provisionDetails);
+        if(provisionDetails == null){
+          error =  "¡Lo sentimos, no hay provisiones para tu edificio!, intenta más tarde.";
+          _onAlertButtonError(context);
+        }else {
+          Navigator.of(context).pushNamed('/products');
+        }
+      });
+    }
+  }
+
+  goToBack(){
+    Navigator.pop(context);
   }
 
   getOffices(int buildingId){
@@ -67,7 +119,10 @@ class _BuildindState extends State<Buildind> {
         centerTitle: true,
         backgroundColor: Colors.orange,
       ),
-      body: Theme(
+        drawer: MainDrawer(),
+      body:isloading == true ?Container(
+        child: LoadingAlert('Descargando edificios...'),
+      ): Theme(
           data: ThemeData(
               primaryColor: Colors.orange
           ),
@@ -167,13 +222,14 @@ class _BuildindState extends State<Buildind> {
                                       color: Colors.white,
                                       fontSize: 15,
                                       fontWeight: FontWeight.bold
-                                  ),),
+                                  ),
+                                ),
                               ),
                               height: 50,
                               width: width/2.2,
                             ),
                             onTap: (){
-                              goToNext();
+                              goToBack();
                             },
                           ),
                           GestureDetector(
@@ -191,6 +247,7 @@ class _BuildindState extends State<Buildind> {
                               height: 50,
                               width: width/2.2,
                             ),
+                            onTap: goToNext,
                           ),
 
                         ],

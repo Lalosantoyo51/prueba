@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:prue/src/bloc/purchaseController.dart';
 import 'package:prue/src/models/purchase.model.dart';
 import 'package:prue/src/models/sale-details-model.dart';
+import 'package:prue/src/widgets/loadingAlert.dart';
 import '../../widgets/menu.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -14,6 +15,12 @@ class History extends StatefulWidget {
 }
 
 class _HistoryState extends State<History> {
+  var loadingContext;
+  closeAlert(
+      BuildContext _context) {
+    Navigator.of(_context).pop();
+  }
+
   DateFormat dateFormat;
   final formatter = new NumberFormat("0.00");
   PurchaseController purchaseController = new PurchaseController();
@@ -26,6 +33,7 @@ class _HistoryState extends State<History> {
   List src = new List();
   List titles = new List();
   List<SaleDetailsModel> saleDatails = new List();
+  bool isloading = true;
 
   @override
   void initState() {
@@ -48,6 +56,14 @@ class _HistoryState extends State<History> {
     }
     return false;
   }
+  loading() async{
+    await showDialog(
+        context: context,
+        builder: (context) {
+          loadingContext = context;
+          return LoadingAlert('Cargando...');
+        });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +76,9 @@ class _HistoryState extends State<History> {
         backgroundColor: Colors.orange,
       ),
       drawer: MainDrawer(),
-      body: Stack(
+      body:isloading == true ?Container(
+        child: LoadingAlert('Cargando historial...'),
+      ): Stack(
         children: <Widget>[
           Container(
             child: ListView.builder(
@@ -391,11 +409,6 @@ class _HistoryState extends State<History> {
                                                               ),
                                                             ));
                                                       });
-                                                  print(sale.length);
-                                                  sale.forEach((sale) {
-                                                    print(sale
-                                                        .productPlace.product.name);
-                                                  });
                                                 })),
                                       ],
                                     )),
@@ -422,12 +435,17 @@ class _HistoryState extends State<History> {
   getPurchase() {
     this.saleDatails = [];
     purchaseController.history().then((List<PurchaseModel> purchase) {
+      print(purchase.length);
       setState(() {
         purchaseModel.addAll(purchase);
+        if(purchase.length > 0){
+          isloading = false;
+        }else {
+          isloading = false;
+        }
       });
       purchaseModel.forEach((purchase) {
         dateFormat = new DateFormat.yMMMMd('es');
-        print(new DateFormat("dd-MM-yyyy").format(new DateTime(1995, 12, 13)));
         this.types = [];
         purchase.sale_details.forEach((saleDetails) {
           this.types.add(saleDetails.productPlace.product.product_type);
@@ -473,3 +491,4 @@ class _HistoryState extends State<History> {
     });
   }
 }
+

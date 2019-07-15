@@ -30,7 +30,7 @@ class PurchaseController {
     return await _purchaseService.CancelOrder(id, comment);
   }
   Future<Sale> createOrder() async{
-    return await _purchaseService.createSale(sale);
+    return await _purchaseService.createSale(cart.cart);
   }
 
 }

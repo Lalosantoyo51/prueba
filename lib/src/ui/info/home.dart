@@ -77,7 +77,6 @@ class _HomeState extends State<Home> {
         print(userModel.gender);
       });
     }
-    print('sdasad ${user.getUser_id}');
     getLocation();
   }
 
@@ -90,10 +89,7 @@ class _HomeState extends State<Home> {
               cart.setPlace_id = areaModel.id;
               area_type = areaModel.type;
               _locationController.areaModel =areaModel ;
-              print(_locationController.areaModel.id);
-              print(_locationController.areaModel.name);
               await _locationController.setMessage().then((MessageResponse messageModel){
-                print(messageModel);
                 if(messageModel == null || messageModel =='null'){
                   getPurchase();
                   setState(() {
@@ -118,7 +114,7 @@ class _HomeState extends State<Home> {
   contains(a, b) {
     for (var i = 0; i < a.length; i++) {
       if (a[i] == b) return true;
-    }            print(_locationController.areaModel.id);
+    }
 
     return false;
   }
@@ -141,12 +137,33 @@ class _HomeState extends State<Home> {
       ],
     ).show();
   }
+  _onAlertButtonSucces(context){
+    Alert(
+      context: context,
+      type: AlertType.success,
+      title: "Tu orden fue Cancelada exitosamente",
+      desc: "",
+      buttons: [
+        DialogButton(
+          color: Colors.orange,
+          child: Text(
+            "Aceptar",
+            style: TextStyle(color: Colors.white, fontSize: 20),
+          ),
+          onPressed: () {
+            Navigator.of(context).pushNamedAndRemoveUntil("/home",  (Route<dynamic> route) => false);
+          },
+          width: 120,
+        )
+      ],
+    ).show();
+  }
   loading() async{
      await showDialog(
         context: context,
         builder: (context) {
           loadingContext = context;
-          return LoadingAlert();
+          return LoadingAlert('Cargando...');
         });
 
   }
@@ -165,7 +182,7 @@ class _HomeState extends State<Home> {
       ),
       drawer: MainDrawer(),
       body: isloading == true ?Container(
-        child: LoadingAlert(),
+        child: LoadingAlert('Cargando...'),
       ): message == null ? Center(
         child: Text('No estas en zona burrera'),
       ):
@@ -317,7 +334,6 @@ class _HomeState extends State<Home> {
                                                   size: height/22,
                                                 ),
                                                 onTap:(){
-                                                  print(purchaseModel[index].employeeModel.phone);
                                                   launch("tel://${purchaseModel[index].employeeModel.phone }");
                                                 },
                                               ),
@@ -333,7 +349,6 @@ class _HomeState extends State<Home> {
                                                   size: height/22,
                                                 ),
                                                 onTap: (){
-                                                  print("${purchaseModel[index].id}");
                                                   sale = [];
                                                   sale = purchaseModel[index]
                                                       .sale_details;
@@ -546,19 +561,19 @@ class _HomeState extends State<Home> {
                                                                                               child: Text('confirmar',
                                                                                                 style: TextStyle(color: Colors.red, fontSize: 20),),
                                                                                               onTap: ()  {
-                                                                                                print(purchaseController.comment);
                                                                                                 if(purchaseController.comment == null || purchaseController.comment == 'null'){
                                                                                                   _onAlertButtonError(context);
                                                                                                 }else {
                                                                                                   purchaseController.id = purchaseModel[index].id;
                                                                                                   try  {
                                                                                                     purchaseController.cancelOrder().then((_){
-                                                                                                      print(_);http://1e016675.ngrok.io
-                                                                                                      Navigator.pop(context);
+                                                                                                      _onAlertButtonSucces(context);
                                                                                                       purchaseModel.clear();
                                                                                                       getPurchase();
+
                                                                                                     });
                                                                                                   } on DioError catch(e) {
+                                                                                                    print('dsadsa');
                                                                                                     print(e.response.data);
                                                                                                   }
                                                                                                 }
@@ -579,7 +594,6 @@ class _HomeState extends State<Home> {
                                                               ),
                                                             ));
                                                       });
-                                                  print(sale.length);
                                                   sale.forEach((sale) {
                                                     print(sale
                                                         .productPlace.product.name);
@@ -599,7 +613,6 @@ class _HomeState extends State<Home> {
       floatingActionButton: new FloatingActionButton(
         hoverColor: Colors.orange,
         onPressed: (){
-          print(area_type);
           if(area_type == 'Building'){
             Navigator.of(context).pushNamed('/building');
           }
@@ -633,7 +646,7 @@ class _HomeState extends State<Home> {
       });
       purchaseModel.forEach((purchase) {
         dateFormat = new DateFormat.yMMMMd('es');
-        print(new DateFormat("dd-MM-yyyy").format(new DateTime(1995, 12, 13)));
+
         this.types = [];
         purchase.sale_details.forEach((saleDetails) {
           this.types.add(saleDetails.productPlace.product.product_type);
@@ -711,7 +724,6 @@ class _HomeState extends State<Home> {
 
   //update detect if you have internet
   Future<void> _updateConnectionStatus(ConnectivityResult result ) async {
-    print(result);
     if(result.index == 0){
     }else if(result.index ==1){
       error = "Sin conexión a Internet";
