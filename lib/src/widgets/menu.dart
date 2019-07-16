@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:prue/src/bloc/authController.dart';
+import 'package:prue/src/models/user.model.dart';
 import '../resource/auth.service.dart';
 import '../models/Userget.dart';
 
@@ -9,7 +11,9 @@ class MainDrawer extends StatefulWidget {
 }
 
 class _MainDrawerState extends State<MainDrawer> {
+
   AuthService _authService = new AuthService();
+  AuthCOntroller _authCOntroller = new AuthCOntroller();
   User user = new User();
   bool isLoading = true;
 
@@ -44,6 +48,17 @@ class _MainDrawerState extends State<MainDrawer> {
   @override
   void initState() {
     super.initState();
+    if(user.getName == null){
+      _authCOntroller.getUser().then((UserModel userModel){
+        user.setName = userModel.name;
+        user.setGender = userModel.gender;
+        user.setBirthday = userModel.birthday;
+        user.setPhone = userModel.phone;
+        user.setLast_Name = userModel.last_name;
+        user.setUser_id = userModel.id;
+        print(userModel.gender);
+      });
+    }
     if (user.getName != null){
       isLoading = false;
     }

@@ -127,8 +127,7 @@ class _BuildindState extends State<Buildind> {
               primaryColor: Colors.orange
           ),
           child: Container(
-            constraints: BoxConstraints.expand(
-            ),
+            constraints: BoxConstraints.expand(),
             child: Stack(
               children: <Widget>[
                 Padding(padding: EdgeInsets.only(top: 20),child: StepperW(1),),

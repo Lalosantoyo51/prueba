@@ -1,3 +1,4 @@
+import 'package:prue/src/models/addplace.dart';
 import 'package:prue/src/models/area.model.dart';
 import 'package:prue/src/models/cart.model.dart';
 import 'package:prue/src/models/messageResponse.dart';
@@ -11,6 +12,7 @@ class locationController {
   String error;
   AreaModel areaModel = new AreaModel();
   CartModel cart = new CartModel();
+  AddPlace addPlace = new AddPlace();
 
   Future getlocation() async{
      return _locationService.getLocation();
@@ -26,7 +28,9 @@ class locationController {
   }
   Future <List<Building>> getBuilding() {
     return _locationService.getBuildings(cart.getPlace_id);
-
+  }
+  Future <AddPlace> addPlaces() {
+    return _locationService.addPlace(addPlace);
   }
 }
 

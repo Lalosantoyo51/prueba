@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/services.dart';
 import 'package:location/location.dart';
+import 'package:prue/src/models/addplace.dart';
 import 'package:prue/src/models/area.model.dart';
 import 'package:prue/src/utils/enviroment.dart';
 import '../models/location.model.dart';
@@ -142,8 +143,28 @@ class LocationService  {
 
   }
 
-  addLocation(){
+  Future <AddPlace> addPlace(AddPlace addPlace) async{
+    print(API_URL);
+    var _data = json.encode(addPlace);
+    var prefs = await SharedPreferences.getInstance();
+    var token = prefs.getString('access_token');
+    var url = '${API_URL}users/current/places';
+    print(_data);
+    print('location ${_data}');
+    Response response;
+    try {
+      response = await dio.post(url, data:_data , options: RequestOptions(
+          headers:{
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'X-Requested-With': 'XMLHttpRequest',
+            'authorization' : 'Bearer $token'
+          }
+      ));
+      return AddPlace.fromJson(response.data);
+    }on DioError catch (e) {
+      print(e.response.data);
 
+    }
   }
   getPlaces(){
 
