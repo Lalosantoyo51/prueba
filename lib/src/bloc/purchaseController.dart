@@ -1,4 +1,5 @@
 import 'package:prue/src/models/cart.model.dart';
+import 'package:prue/src/models/product-place.model.dart';
 import 'package:prue/src/models/sale.dart';
 
 import '../resource/purchase.service.dart';
@@ -17,6 +18,9 @@ class PurchaseController {
 
   Future<List<ProvisionDetails>> getProducts() async{
     return await _purchaseService.getProdcuts(cart.getOffice_id);
+  }
+  Future<List<ProductPlace>> getProductsStreet() async{
+    return await _purchaseService.getProdcutsStreet(cart.getPlace_id);
   }
 
   Future<List<PurchaseModel>> history() async{

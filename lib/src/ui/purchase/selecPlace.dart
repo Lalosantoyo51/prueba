@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:prue/src/bloc/location.controller.dart';
+import 'package:prue/src/models/addplace.dart';
 import 'package:prue/src/widgets/menu.dart';
 import 'package:prue/src/widgets/stepperW.dart';
 
@@ -9,32 +11,31 @@ class SelecPlace extends StatefulWidget {
 
 class _SelecPlaceState extends State<SelecPlace> {
   String selected_place;
-  List _cities =
-  ["Cluj-Napoca", "Bucuresti", "Timisoara", "Brasov", "Constanta"];
-  List<DropdownMenuItem<String>> listBuiling = [];
-
-  List<DropdownMenuItem<String>> _dropDownMenuItems;
-  String _currentCity;
+  locationController locationC = new locationController();
+  List<DropdownMenuItem<String>> listPlace = [];
+  List<AddPlace> addPlace = new List() ;
 
 
   @override
   void initState() {
-    _dropDownMenuItems = getDropDownMenuItems();
-    _currentCity = _dropDownMenuItems[0].value;
     super.initState();
+    locationC.getPlaces().then((List<AddPlace> addPlace){
+      this.addPlace = addPlace;
+      setState(() {
+        listPlace = [];
+      });
+      this.addPlace.forEach((place){
+        listPlace.add(new DropdownMenuItem(
+            child: new Text('${place.name}') ,
+            value: place.id.toString()
+        ));
+      });
+
+
+    });
+
   }
-  List<DropdownMenuItem<String>> getDropDownMenuItems() {
-    List<DropdownMenuItem<String>> items = new List();
-    for (String city in _cities) {
-      // here we are creating the drop down menu items, you can customize the item right here
-      // but I'll just use a simple text for this
-      items.add(new DropdownMenuItem(
-          value: city,
-          child: new Text(city)
-      ));
-    }
-    return items;
-  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -97,7 +98,7 @@ class _SelecPlaceState extends State<SelecPlace> {
                             isExpanded: true,
                             icon: Icon(Icons.place),
                             value: selected_place,
-                            items: _dropDownMenuItems,
+                            items: listPlace,
                             hint: Container(
                               child:Row(
                                 mainAxisSize: MainAxisSize.min,
@@ -109,6 +110,9 @@ class _SelecPlaceState extends State<SelecPlace> {
                               ),
                             ),
                             onChanged: (value){
+                              setState(() {
+                                selected_place = value;
+                              });
                             },
                           ),),
                           Padding(padding: EdgeInsets.only(top: 15)),
@@ -170,7 +174,9 @@ class _SelecPlaceState extends State<SelecPlace> {
                             height: 50,
                             width: width/2.2,
                           ),
-                          onTap: null,
+                          onTap: (){
+                            Navigator.of(context).pushNamed('/products');
+                          },
                         ),
 
                       ],

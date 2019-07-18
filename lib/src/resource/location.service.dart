@@ -115,7 +115,6 @@ class LocationService  {
     }on DioError catch (e) {
       print(e.response.data);
       return AreaModel.fromJson(e.response.data);
-
     }
  }
 
@@ -166,8 +165,28 @@ class LocationService  {
 
     }
   }
-  getPlaces(){
+  Future <List<AddPlace>> getPlaces() async{
+    List<AddPlace> list_places;
+    print(API_URL);
+    var prefs = await SharedPreferences.getInstance();
+    var token = prefs.getString('access_token');
+    var url = '${API_URL}users/current/places';
+    Response response;
+    try {
+      response = await dio.get(url, options: RequestOptions(
+          headers:{
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'X-Requested-With': 'XMLHttpRequest',
+            'authorization' : 'Bearer $token'
+          }
+      ));
+      var rest = response.data as List;
+      list_places = rest.map<AddPlace>((json) => AddPlace.fromJson(json)).toList();
+      return list_places;
+    }on DioError catch (e) {
+      print(e.response.data);
 
+    }
   }
 
 }

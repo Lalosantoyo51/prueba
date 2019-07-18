@@ -37,7 +37,6 @@ class _BuildindState extends State<Buildind> {
       this.buildings = buildings;
       buildings.forEach((building){
         building.offices.forEach((office){
-
         });
       });
       setState(() {

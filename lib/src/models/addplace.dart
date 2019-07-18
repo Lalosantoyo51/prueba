@@ -5,14 +5,18 @@ class AddPlace {
   String name;
   double lat;
   double lng;
-  AddPlace({this.id,this.user_id,this.address,this.name,this.lat,this.lng});
+  String latitude;
+  String longitude;
+  AddPlace({this.id,this.user_id,this.address,this.name,this.lat,this.lng,
+    this.latitude,this.longitude
+  });
   factory AddPlace.fromJson(Map<String, dynamic> json){
     return new AddPlace(
         id : json['id'],
         user_id: json['user_id'],
         name : json['name'],
-        lat : json['latitude'],
-        lng: json['longitude'],
+        latitude : json['latitude'],
+        longitude: json['longitude'],
         address : json['address']
     );
 

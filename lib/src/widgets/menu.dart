@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:prue/src/bloc/authController.dart';
+import 'package:prue/src/models/cart.model.dart';
 import 'package:prue/src/models/user.model.dart';
 import '../resource/auth.service.dart';
 import '../models/Userget.dart';
@@ -11,9 +12,10 @@ class MainDrawer extends StatefulWidget {
 }
 
 class _MainDrawerState extends State<MainDrawer> {
-
   AuthService _authService = new AuthService();
   AuthCOntroller _authCOntroller = new AuthCOntroller();
+  CartModel cart = new CartModel();
+
   User user = new User();
   bool isLoading = true;
 
@@ -35,6 +37,10 @@ class _MainDrawerState extends State<MainDrawer> {
 
   IconData history = const IconData(
       0xf402,
+      fontFamily: CupertinoIcons.iconFont,
+      fontPackage: CupertinoIcons.iconFontPackage);
+  IconData myPlaces = const IconData(
+      0xf455,
       fontFamily: CupertinoIcons.iconFont,
       fontPackage: CupertinoIcons.iconFontPackage);
 
@@ -128,6 +134,8 @@ class _MainDrawerState extends State<MainDrawer> {
         createDrawerItems("Inicio", home, '/home'),
         createDrawerItems("Historial", history, '/history'),
         createDrawerItems("Mi perfil", profile, '/profile'),
+        cart.getAreaType == 'Street' ?
+        createDrawerItems("Mis lugares ",myPlaces , '/about') : Container(),
         createDrawerItems("Acerca de ", about, '/about'),
 
 

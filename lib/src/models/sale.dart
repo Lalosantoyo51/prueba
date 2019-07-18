@@ -7,9 +7,12 @@ class Sale{
   int place_user_id;
   List<ProductModel> products = new List();
   String payment_type;
+  double lat;
+  double lng;
+
 
   Sale({this.place_id,this.products,this.payment_type,this.employee_id,
-    this.office_id,this.place_user_id});
+    this.office_id,this.place_user_id,this.lng,this.lat});
 
   factory Sale.fromJson(Map<String, dynamic> json){
     var product = json['products'];
@@ -32,6 +35,8 @@ class Sale{
     'payment_type': this.payment_type,
     'products': this.products,
     'office_id': this.office_id,
+    'latitude' : this.lat,
+    'longitude' : this.lng
   };
 
 

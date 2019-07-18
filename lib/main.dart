@@ -35,8 +35,8 @@ Future<void> main() async {
     new MaterialApp(
       title: 'El niño de los burritos',
       debugShowCheckedModeBanner: false,
-      home: Maps(),
-      //home:(tokenModel.token  == null || tokenModel.token == "") ? SignIn() : (tokenModel.token  != null && tutorial == 'visto') ? Home() : Tutorial(),
+      //home: Maps(),
+      home:(tokenModel.token  == null || tokenModel.token == "") ? SignIn() : (tokenModel.token  != null && tutorial == 'visto') ? Home() : Tutorial(),
       routes: <String, WidgetBuilder>{
         '/sign-in': (BuildContext context) => new SignIn(),
         '/home': (BuildContext context) => new Home(),
@@ -52,6 +52,8 @@ Future<void> main() async {
         '/history': (BuildContext context) => new History(),
         '/payment': (BuildContext context) => new Payment(),
         '/confirm': (BuildContext context) => new Confirm(),
+        '/maps': (BuildContext context) => new Maps(),
+        '/selec_place': (BuildContext context) => new SelecPlace(),
       },
     ),
   );

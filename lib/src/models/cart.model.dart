@@ -6,10 +6,10 @@ import './produc.model.dart';
 class CartModel {
   static int seller_id;
   static int total;
+  static double latitude;
+  static double longitude;
   static int totalproduct;
   static int place_id;
-  static int latitude;
-  static int longitude;
   static int places_user_id;
   static int user_id;
   static String payment;
@@ -27,6 +27,18 @@ class CartModel {
   String get gethola{
     return hola;
   }
+  void set setLatitude(double value){
+    latitude = value;
+  }
+  double get getLatitude{
+    return latitude;
+  }
+  void set setLongitude(double value){
+    latitude = value;
+  }
+  double get getLongitude{
+    return longitude;
+  }
   //fin
 
   void set setSeller_id(int value){
@@ -41,19 +53,6 @@ class CartModel {
   }
   int get getPlace_id{
     return place_id;
-  }
-
-  void set setLatitude(int value){
-    latitude = value;
-  }
-  int get getLatitude{
-    return latitude;
-  }
-  void set setLongitude(int value){
-    longitude = value;
-  }
-  int get getLongitude{
-    return longitude;
   }
   void set setPlaces_user_id(int value){
     places_user_id = value;
@@ -115,22 +114,21 @@ class CartModel {
     sale.products = this.getPurchasedProducts();
     return sale;
   }
+  Sale get cartStreet{
+    var sale = new Sale();
+    sale.place_id = CartModel.place_id;
+    sale.employee_id = CartModel.seller_id;
+    sale.office_id = CartModel.offices.id;
+    sale.payment_type = "Cash";
+    sale.products = this.getPurchasedProducts();
+    return sale;
+  }
    getPurchasedProducts(){
     CartModel.products.forEach((product){
       //print('model cart ${product.name}');
     });
     return CartModel.products;
    }
-
-
-
-  Map CreatePurchase() => {
-    'employee_id': CartModel.seller_id,
-    'place_id': CartModel.place_id,
-    'payment_type': "Cash",
-    'office': CartModel.offices.id,
-    'user_id': CartModel.user_id,
-  };
 
 
 }

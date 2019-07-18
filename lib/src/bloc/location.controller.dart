@@ -32,5 +32,8 @@ class locationController {
   Future <AddPlace> addPlaces() {
     return _locationService.addPlace(addPlace);
   }
+  Future <List<AddPlace>> getPlaces() {
+    return _locationService.getPlaces();
+  }
 }
 

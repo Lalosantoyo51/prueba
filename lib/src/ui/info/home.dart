@@ -84,10 +84,13 @@ class _HomeState extends State<Home> {
        await _locationController.getlocation().then((_) {
         _locationController.areaModel.lat = _[0]['latitude'];
         _locationController.areaModel.lng = _[0]['longitude'];
+        cart.setLatitude = _[0]['latitude'];
+        cart.setLongitude = _[0]['longitude'];
           _locationController.getCurrentPlace().then((AreaModel areaModel) async {
             if(areaModel.id != null){
               cart.setPlace_id = areaModel.id;
               area_type = areaModel.type;
+              cart.setAreaType = areaModel.type;
               _locationController.areaModel =areaModel ;
               await _locationController.setMessage().then((MessageResponse messageModel){
                 if(messageModel == null || messageModel =='null'){
@@ -613,8 +616,11 @@ class _HomeState extends State<Home> {
       floatingActionButton: new FloatingActionButton(
         hoverColor: Colors.orange,
         onPressed: (){
+          print(area_type);
           if(area_type == 'Building'){
             Navigator.of(context).pushNamed('/building');
+          }else if(area_type == "Street"){
+            Navigator.of(context).pushNamed('/selec_place');
           }
         },
         tooltip: 'ver edificios',

@@ -9,6 +9,7 @@ class ProvisionDetails {
    int quantity;
    int availables;
    Provision provision;
+   int product_id;
 
    ProductPlace product_place;
 
@@ -19,6 +20,16 @@ class ProvisionDetails {
     return new ProvisionDetails(
         id : json['id'],
         product_place_id : json['product_place_id'],
+        provision_id : json['provision_id'],
+        quantity : json['quantity'],
+        availables : json['availables'],
+        product_place : new ProductPlace.fromJson(json['product_place']),
+        provision: new Provision.fromJson(json['provision'])
+    );
+  }
+  factory ProvisionDetails.fromJsonStreet(Map<String, dynamic> json){
+    return new ProvisionDetails(
+        id : json['id'],
         provision_id : json['provision_id'],
         quantity : json['quantity'],
         availables : json['availables'],

@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:prue/src/models/product-place.model.dart';
 import 'package:prue/src/models/sale.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../models/provisionDetails.dart';
@@ -28,6 +29,29 @@ class PurchaseService{
 
       var rest = response.data as List;
       list_product = rest.map<ProvisionDetails>((i) => ProvisionDetails.fromJson(i)).toList();
+      return list_product;
+    }on DioError catch(e){
+      print('sdsadsa');
+    }
+  }
+  Future <List<ProductPlace>> getProdcutsStreet(int place_id) async{
+    var url = '${API_URL}places/$place_id/provisions';
+    var prefs = await SharedPreferences.getInstance();
+    var token = prefs.getString('access_token');
+    List<ProductPlace> list_product;
+    print(url);
+    Response response;
+    try{
+      response = await dio.get(url, options: RequestOptions(
+          headers:{
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'X-Requested-With': 'XMLHttpRequest',
+            'authorization' : 'Bearer $token'
+          }
+      ));
+      print(response.data[0]['products_place']);
+      var rest = response.data[0]['products_place'] as List;
+      list_product = rest.map<ProductPlace>((i) => ProductPlace.fromJson(i)).toList();
       return list_product;
     }on DioError catch(e){
       print('sdsadsa');
