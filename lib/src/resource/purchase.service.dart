@@ -34,11 +34,11 @@ class PurchaseService{
       print('sdsadsa');
     }
   }
-  Future <List<ProductPlace>> getProdcutsStreet(int place_id) async{
-    var url = '${API_URL}places/$place_id/provisions';
+  Future <List<ProvisionDetails>> getProdcutsStreet(int place_id) async{
+    var url = '${API_URL}street/$place_id/provisions';
     var prefs = await SharedPreferences.getInstance();
     var token = prefs.getString('access_token');
-    List<ProductPlace> list_product;
+    List<ProvisionDetails> list_product;
     print(url);
     Response response;
     try{
@@ -49,9 +49,9 @@ class PurchaseService{
             'authorization' : 'Bearer $token'
           }
       ));
-      print(response.data[0]['products_place']);
-      var rest = response.data[0]['products_place'] as List;
-      list_product = rest.map<ProductPlace>((i) => ProductPlace.fromJson(i)).toList();
+      print(response.data);
+      var rest = response.data as List;
+      list_product = rest.map<ProvisionDetails>((i) => ProvisionDetails.fromJson(i)).toList();
       return list_product;
     }on DioError catch(e){
       print('sdsadsa');
@@ -78,7 +78,6 @@ class PurchaseService{
     } on DioError catch(e){
       print(e.response.data);
     }
-
   }
 
   Future <List<PurchaseModel>> history(int numberpage)async{

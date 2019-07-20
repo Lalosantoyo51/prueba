@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:prue/src/ui/purchase/confirm.dart';
 import 'package:prue/src/ui/purchase/history.dart';
 import 'package:prue/src/ui/purchase/map.dart';
+import 'package:prue/src/ui/purchase/myPLaces.dart';
 import 'package:prue/src/ui/purchase/payment.dart';
 import 'package:prue/src/ui/purchase/selecPlace.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -54,6 +55,7 @@ Future<void> main() async {
         '/confirm': (BuildContext context) => new Confirm(),
         '/maps': (BuildContext context) => new Maps(),
         '/selec_place': (BuildContext context) => new SelecPlace(),
+        '/myPlaces': (BuildContext context) => new Myplaces(),
       },
     ),
   );

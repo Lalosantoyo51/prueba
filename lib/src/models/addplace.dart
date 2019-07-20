@@ -15,6 +15,17 @@ class AddPlace {
         id : json['id'],
         user_id: json['user_id'],
         name : json['name'],
+        lat : json['latitude'],
+        lng: json['longitude'],
+        address : json['address']
+    );
+
+  }
+  factory AddPlace.fromJsonget(Map<String, dynamic> json){
+    return new AddPlace(
+        id : json['id'],
+        user_id: json['user_id'],
+        name : json['name'],
         latitude : json['latitude'],
         longitude: json['longitude'],
         address : json['address']

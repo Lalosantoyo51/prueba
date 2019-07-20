@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:prue/src/bloc/location.controller.dart';
+import 'package:prue/src/bloc/purchaseController.dart';
 import 'package:prue/src/models/addplace.dart';
+import 'package:prue/src/models/cart.model.dart';
+import 'package:prue/src/models/provisionDetails.dart';
+import 'package:prue/src/widgets/loadingAlert.dart';
 import 'package:prue/src/widgets/menu.dart';
 import 'package:prue/src/widgets/stepperW.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 class SelecPlace extends StatefulWidget {
   @override
@@ -12,13 +17,25 @@ class SelecPlace extends StatefulWidget {
 class _SelecPlaceState extends State<SelecPlace> {
   String selected_place;
   locationController locationC = new locationController();
+  PurchaseController  purchaseController = new PurchaseController();
   List<DropdownMenuItem<String>> listPlace = [];
   List<AddPlace> addPlace = new List() ;
+  CartModel cart = new CartModel();
+  double lat;
+  String error;
+  String message;
+  var loadingContext;
+
+  closeAlert(BuildContext _context) {
+    Navigator.of(_context).pop();
+  }
 
 
   @override
   void initState() {
     super.initState();
+    cart.setRoute = "selec_place";
+    cart.setPlaces_user_id = null;
     locationC.getPlaces().then((List<AddPlace> addPlace){
       this.addPlace = addPlace;
       setState(() {
@@ -34,6 +51,68 @@ class _SelecPlaceState extends State<SelecPlace> {
 
     });
 
+  }
+  goToAddPlaces(){
+    Navigator.of(context).pushNamed('/maps');
+  }
+  getCurrenPlace()async{
+    message = 'Obteneindo ubicación';
+    loading();
+    await locationC.getlocation().then((_) {
+      locationC.areaModel.lat = _[0]['latitude'];
+      locationC.areaModel.lng = _[0]['longitude'];
+      lat = _[0]['latitude'];
+      cart.setLatitude = _[0]['latitude'];
+      cart.setLongitude = _[0]['longitude'];
+      closeAlert(context);
+      onAlertButtonSucces(context);
+    });
+  }
+  _onAlertButtonError(context){
+    Alert(
+      context: context,
+      type: AlertType.warning,
+      title: "Advertencia",
+      desc: "${error}",
+      buttons: [
+        DialogButton(
+          color: Colors.orange,
+          child: Text(
+            "Aceptar",
+            style: TextStyle(color: Colors.white, fontSize: 20),
+          ),
+          onPressed: () => Navigator.pop(context),
+          width: 120,
+        )
+      ],
+    ).show();
+  }
+  onAlertButtonSucces(context){
+    Alert(
+      context: context,
+      type: AlertType.success,
+      title: "Advertencia",
+      desc: "Se obtuvo tu ubicacion",
+      buttons: [
+        DialogButton(
+          color: Colors.orange,
+          child: Text(
+            "Aceptar",
+            style: TextStyle(color: Colors.white, fontSize: 20),
+          ),
+          onPressed: () => Navigator.pop(context),
+          width: 120,
+        )
+      ],
+    ).show();
+  }
+  loading() async {
+    showDialog(
+        context: context,
+        builder: (context) {
+          loadingContext = context;
+          return LoadingAlert(message);
+        });
   }
 
 
@@ -75,13 +154,16 @@ class _SelecPlaceState extends State<SelecPlace> {
                             ),),
                           Padding(padding: EdgeInsets.only(top: 15)),
 
-                          RaisedButton(onPressed: null,
+                          RaisedButton(onPressed: (){
+                            getCurrenPlace();
+                          },
                             child: Text('Mi ubicacion Actual',
                               style: TextStyle(
                                   color: Colors.white,
                                 fontSize: height/30
                               ),),
                             disabledColor: Colors.orange,
+                            color: Colors.orange,
                             shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
                           ),
                           Padding(padding: EdgeInsets.only(top: 15)),
@@ -112,17 +194,22 @@ class _SelecPlaceState extends State<SelecPlace> {
                             onChanged: (value){
                               setState(() {
                                 selected_place = value;
+                                print(value);
+                                cart.setPlaces_user_id = int.parse(value);
                               });
                             },
                           ),),
                           Padding(padding: EdgeInsets.only(top: 15)),
-                          RaisedButton(onPressed: null,
+                          RaisedButton(
+                            onPressed: goToAddPlaces,
                             child: Text('Añadir nuevo lugar',
                               style: TextStyle(
                                   color: Colors.white,
                                   fontSize: height/30
                               ),),
                             disabledColor: Colors.orange,
+                            hoverColor: Colors.orange,
+                            color: Colors.orange,
                             shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
                           ),
                         ],
@@ -156,7 +243,7 @@ class _SelecPlaceState extends State<SelecPlace> {
                             width: width/2.2,
                           ),
                           onTap: (){
-
+                            Navigator.pop(context);
                           },
                         ),
                         GestureDetector(
@@ -175,7 +262,22 @@ class _SelecPlaceState extends State<SelecPlace> {
                             width: width/2.2,
                           ),
                           onTap: (){
-                            Navigator.of(context).pushNamed('/products');
+                            if(lat == null && cart.getPlaces_user_id == null){
+                              error =  "Hey amigo selecciona tu lugar de entrega";
+                              _onAlertButtonError(context);
+
+                            }else {
+                              purchaseController.getProductsStreet().then((List<ProvisionDetails> provisionDetails){
+                                print(provisionDetails);
+                                if(provisionDetails == null){
+                                  error = "";
+                                  error =  "¡Lo sentimos, no hay provisiones para tu zona!, intenta más tarde.";
+                                  _onAlertButtonError(context);
+                                }else {
+                                  Navigator.of(context).pushNamed('/products');
+                                }
+                              });
+                            }
                           },
                         ),
 

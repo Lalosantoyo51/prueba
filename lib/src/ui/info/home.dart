@@ -6,6 +6,7 @@ import 'package:prue/src/models/area.model.dart';
 import 'package:prue/src/models/cart.model.dart';
 import 'package:prue/src/models/purchase.model.dart';
 import 'package:prue/src/models/sale-details-model.dart';
+import 'package:prue/src/utils/enviroment.dart';
 import 'package:prue/src/widgets/loadingAlert.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import '../../bloc/location.controller.dart';
@@ -19,6 +20,8 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:dio/dio.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/services.dart';
+const url = SERVER_URL;
+
 
 //status conection internet
 final Connectivity _connectivity = Connectivity();
@@ -79,7 +82,13 @@ class _HomeState extends State<Home> {
     }
     getLocation();
   }
-
+  urlnino() async {
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
   getLocation() async{
        await _locationController.getlocation().then((_) {
         _locationController.areaModel.lat = _[0]['latitude'];
@@ -107,7 +116,12 @@ class _HomeState extends State<Home> {
                 }
               });
             }else {
-              closeAlert(context);
+              setState(() {
+                message =null;
+                isloading = false;
+                error = "No te encuentras en zona burrera";
+                alertZoneOut();
+              });
             }
           });
 
@@ -186,8 +200,24 @@ class _HomeState extends State<Home> {
       drawer: MainDrawer(),
       body: isloading == true ?Container(
         child: LoadingAlert('Cargando...'),
-      ): message == null ? Center(
-        child: Text('No estas en zona burrera'),
+      ): message == null || message == 'null' ? Container(
+        width: width,
+        child: Center(
+          child: MaterialButton(
+            onPressed: (){
+              urlnino();
+            },
+            height: 50.0,minWidth: width/1.2,
+            color: Colors.orange,
+            splashColor: Colors.deepOrangeAccent,
+            textColor: Colors.white,
+            child: new Text("Ver sucursales", style: new TextStyle(
+                color: Colors.white,
+                fontSize: height/30
+            ),),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
+          ),
+        )
       ):
       purchaseModel.length < 1 && message != null ?Center(
         child: Text('$message'),
@@ -702,6 +732,10 @@ class _HomeState extends State<Home> {
     _scaffoldKey.currentState.showSnackBar(
         SnackBar(content: Text("$error"),backgroundColor: Colors.red.shade400,));
   }
+  Future alertZoneOut() async{
+    _scaffoldKey.currentState.showSnackBar(
+        SnackBar(content: Text("$error"),backgroundColor: Colors.red.shade400,));
+  }
 
   // detect if you have internet
   Future<void> initConnectivity() async {
@@ -709,12 +743,8 @@ class _HomeState extends State<Home> {
     try {
 
       result = await _connectivity.checkConnectivity();
+      print(result.index);
       if(result.index == 0){
-      }else if(result.index ==1){
-        new Future.delayed(Duration.zero,() {
-          alert();
-        });
-        error = "Sin conexión a Internet";
       }
       else if(result.index ==2){
         new Future.delayed(Duration.zero,() {

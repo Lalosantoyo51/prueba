@@ -9,7 +9,7 @@ import 'package:rflutter_alert/rflutter_alert.dart';
 import '../../models/provisionDetails.dart';
 import '../../bloc/purchaseController.dart';
 import '../../models/cart.model.dart';
-import 'dart:convert';
+import 'package:intl/intl.dart';
 
 class Products extends StatefulWidget {
   @override
@@ -26,6 +26,8 @@ class _ProductsState extends State<Products> {
   List <ProductPlace> productPlace = new List();
   bool isloading = true;
   String error;
+  final formatter = new NumberFormat("0.00");
+
 
   _onAlertButtonError(context){
     Alert(
@@ -78,18 +80,22 @@ class _ProductsState extends State<Products> {
      });
    }
    getProductsStreet() async{
-     await purchaseController.getProductsStreet().then((List<ProductPlace> productPlace){
+     await purchaseController.getProductsStreet().then((List<ProvisionDetails> provisionDestils){
        setState(() {
-         this.productPlace.addAll(productPlace);
-         productPlace.forEach((produt){
-           produt.product.value = 0;
-         });
-         print(productPlace.length);
-         if(productPlace.length >0){
+         this.provisionDestils = provisionDestils;
+         if(provisionDestils.length >0){
            isloading =false;
          }
-
-
+       });
+       this.provisionDestils.forEach((provisionDestil){
+         print(provisionDestil.id);
+         cart.setSeller_id = provisionDestil.provision.seller_id;
+         provisionDestil.product_place.product.provision_detail_id = provisionDestil.id;
+         provisionDestil.product_place.product.product_place_id = provisionDestil.product_place_id;
+         cart.setSeller_id = provisionDestil.provision.seller_id;
+         setState(() {
+           provisionDestil.product_place.product.value = 0;
+         });
        });
      });
    }
@@ -98,6 +104,7 @@ class _ProductsState extends State<Products> {
   }
 
    next(){
+    print(cart.getAreaType);
     if(cart.getAreaType == 'Buildin'){
       nextBuildin();
     }else if (cart.getAreaType == 'Street'){
@@ -147,10 +154,10 @@ class _ProductsState extends State<Products> {
      var total = 0;
      var totalProduct = 0;
      product.clear();
-     this.productPlace.forEach((prodcutplace){
-       if(prodcutplace.product.value > 0 ){
-         product.add(prodcutplace.product);
-         total = total + (prodcutplace.cost * prodcutplace.product.value);
+     provisionDestils.forEach((provision){
+       if(provision.product_place.product.value > 0 ){
+         product.add(provision.product_place.product);
+         total = total + (provision.product_place.cost * provision.product_place.product.value);
          cart.setTotal = total;
        }
        cart.setProducts = product;
@@ -160,8 +167,9 @@ class _ProductsState extends State<Products> {
        purchaseController.sale.office_id = cart.getOffice_id;
        purchaseController.sale.products = cart.getProduct;
        purchaseController.sale.products.forEach((sale){
-         sale.cost = prodcutplace.cost;
+         sale.cost = provision.product_place.cost;
        });
+
      });
      purchaseController.sale.products.forEach((product){
        totalProduct = totalProduct + product.value;
@@ -201,7 +209,7 @@ class _ProductsState extends State<Products> {
             Padding(padding: EdgeInsets.only(top: 20),child: StepperW(2),),
             Padding(padding: EdgeInsets.only(top: 90,bottom: 90),
               child:ListView.builder(
-                  itemCount: cart.getAreaType == 'Building' ? provisionDestils.length: productPlace.length,
+                  itemCount: provisionDestils.length,
                   itemBuilder: (BuildContext context, int index){
                 return Padding(padding: EdgeInsets.only(top: 10),
                 child: Card(
@@ -223,12 +231,11 @@ class _ProductsState extends State<Products> {
                              ],
                            ): Column(
                              children: <Widget>[
-                               Text("∞",style: TextStyle(fontSize: 40,),),
+                               Text("${provisionDestils[index].availables}",style: TextStyle(fontSize: 40,),),
                                Text("Burritos restantes",textAlign: TextAlign.center,),
                              ],
                            ),
                          ),
-                         cart.getAreaType == 'Building'  ?
                          Padding(padding: EdgeInsets.only(left: 5),
                            child: Column(
                              crossAxisAlignment: CrossAxisAlignment.start,
@@ -241,25 +248,7 @@ class _ProductsState extends State<Products> {
                                Padding(padding: EdgeInsets.only(top: 5)),
                                Text('${provisionDestils[index].product_place.product.description}'),
                                Padding(padding: EdgeInsets.only(top: 30)),
-                               Text(r'$16.00',style: TextStyle(fontSize: 17,
-                                   color: Colors.orange,
-                                   fontWeight: FontWeight.w600
-                               ),),
-                             ],
-                           ),):
-                         Padding(padding: EdgeInsets.only(left: 5),
-                           child: Column(
-                             crossAxisAlignment: CrossAxisAlignment.start,
-                             children: <Widget>[
-                               Text('${productPlace[index].product.name}',
-                                 style: TextStyle(fontWeight: FontWeight.bold,
-                                   color: Colors.black,
-                                   fontSize: 17,
-                                 ),),
-                               Padding(padding: EdgeInsets.only(top: 5)),
-                               Text('${productPlace[index].product.description}'),
-                               Padding(padding: EdgeInsets.only(top: 30)),
-                               Text(r'$16.00',style: TextStyle(fontSize: 17,
+                               Text(r'$'+ "${formatter.format(provisionDestils[index].product_place.cost)}",style: TextStyle(fontSize: 17,
                                    color: Colors.orange,
                                    fontWeight: FontWeight.w600
                                ),),
@@ -267,7 +256,6 @@ class _ProductsState extends State<Products> {
                            ),)
                        ],
                      ),
-                     cart.getAreaType == 'Building'  ?
                      Positioned(
                        right: 0.0,
                          child: Container(
@@ -308,50 +296,6 @@ class _ProductsState extends State<Products> {
                                     }
                                   });
                                  },
-                                   child: Icon(Icons.remove,size: 34,
-                                       color: Colors.black54)
-                               ),
-                             ],
-                           ),
-                         )):Positioned(
-                         right: 0.0,
-                         child: Container(
-                           decoration: BoxDecoration(border: Border.all(color: Colors.black26)),
-                           height: 100,
-                           child: Column(
-                             mainAxisSize: MainAxisSize.max,
-                             crossAxisAlignment: CrossAxisAlignment.center,
-                             mainAxisAlignment: MainAxisAlignment.center,
-                             children: <Widget>[
-                               GestureDetector(
-                                 child: Text('+',textAlign: TextAlign.center,
-                                     style: TextStyle(
-                                         fontSize: 30,
-                                         fontWeight: FontWeight.w500,
-                                         color: Colors.black54
-                                     )
-                                 ),
-                                 onTap: (){
-                                   setState(() {
-                                     productPlace[index].product.value = productPlace[index].product.value + 1;
-                                   });
-                                 },
-                               ),
-                               Text('${productPlace[index].product.value}',textAlign: TextAlign.center,
-                                 style: TextStyle(
-                                     fontSize: 15,
-                                     color: Colors.black54
-                                 ),),
-                               GestureDetector(
-                                   onTap: (){
-                                     setState(() {
-                                       if(productPlace[index].product.value > 0){
-                                         productPlace[index].product.value = productPlace[index].product.value - 1;
-                                       }
-
-
-                                     });
-                                   },
                                    child: Icon(Icons.remove,size: 34,
                                        color: Colors.black54)
                                ),

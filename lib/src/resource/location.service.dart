@@ -181,12 +181,30 @@ class LocationService  {
           }
       ));
       var rest = response.data as List;
-      list_places = rest.map<AddPlace>((json) => AddPlace.fromJson(json)).toList();
+      list_places = rest.map<AddPlace>((json) => AddPlace.fromJsonget(json)).toList();
       return list_places;
     }on DioError catch (e) {
       print(e.response.data);
 
     }
   }
+  Future deletePlaces(int place_id) async{
+    var prefs = await SharedPreferences.getInstance();
+    var token = prefs.getString('access_token');
+    var url = '${API_URL}users/current/places/$place_id';
+    Response response;
+    try {
+      response = await dio.delete(url, options: RequestOptions(
+          headers:{
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'X-Requested-With': 'XMLHttpRequest',
+            'authorization' : 'Bearer $token'
+          }
+      ));
+      return response.data;
+    }on DioError catch (e) {
+      print(e.response.data);
 
+    }
+  }
 }

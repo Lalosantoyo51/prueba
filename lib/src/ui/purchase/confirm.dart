@@ -29,12 +29,22 @@ class _ConfirmState extends State<Confirm> {
     Navigator.pop(context);
   }
   Future buy(){
-    purchaseController.createOrder().then((Sale sale){
-      loading();
-      print('compra realizada');
+    if(cart.getAreaType == 'Building'){
+      purchaseController.createOrder().then((Sale sale){
+        loading();
+        print('compra realizada');
         Navigator.of(context).pushNamedAndRemoveUntil("/home",  (Route<dynamic> route) => false);
 
-    });
+      });
+    }else if(cart.getAreaType == 'Street'){
+      print('dsadsadasds');
+      purchaseController.createOrderStreet().then((Sale sale){
+        loading();
+        print('compra realizada');
+        Navigator.of(context).pushNamedAndRemoveUntil("/home",  (Route<dynamic> route) => false);
+
+      });
+    }
   }
   loading() async{
     await showDialog(

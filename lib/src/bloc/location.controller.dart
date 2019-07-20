@@ -13,6 +13,7 @@ class locationController {
   AreaModel areaModel = new AreaModel();
   CartModel cart = new CartModel();
   AddPlace addPlace = new AddPlace();
+  int place_id;
 
   Future getlocation() async{
      return _locationService.getLocation();
@@ -34,6 +35,9 @@ class locationController {
   }
   Future <List<AddPlace>> getPlaces() {
     return _locationService.getPlaces();
+  }
+  Future deletePlace() {
+    return _locationService.deletePlaces(place_id);
   }
 }
 

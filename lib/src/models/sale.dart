@@ -36,7 +36,8 @@ class Sale{
     'products': this.products,
     'office_id': this.office_id,
     'latitude' : this.lat,
-    'longitude' : this.lng
+    'longitude' : this.lng,
+    'place_user_id' : this.place_user_id
   };
 
 

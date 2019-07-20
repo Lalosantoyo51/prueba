@@ -135,7 +135,7 @@ class _MainDrawerState extends State<MainDrawer> {
         createDrawerItems("Historial", history, '/history'),
         createDrawerItems("Mi perfil", profile, '/profile'),
         cart.getAreaType == 'Street' ?
-        createDrawerItems("Mis lugares ",myPlaces , '/about') : Container(),
+        createDrawerItems("Mis lugares ",myPlaces , '/myPlaces') : Container(),
         createDrawerItems("Acerca de ", about, '/about'),
 
 

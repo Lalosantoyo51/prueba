@@ -19,7 +19,7 @@ class PurchaseController {
   Future<List<ProvisionDetails>> getProducts() async{
     return await _purchaseService.getProdcuts(cart.getOffice_id);
   }
-  Future<List<ProductPlace>> getProductsStreet() async{
+  Future <List<ProvisionDetails>> getProductsStreet() async{
     return await _purchaseService.getProdcutsStreet(cart.getPlace_id);
   }
 
@@ -35,6 +35,9 @@ class PurchaseController {
   }
   Future<Sale> createOrder() async{
     return await _purchaseService.createSale(cart.cart);
+  }
+  Future<Sale> createOrderStreet() async{
+    return await _purchaseService.createSale(cart.cartStreet);
   }
 
 }

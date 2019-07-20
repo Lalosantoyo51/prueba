@@ -4,6 +4,8 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:prue/src/bloc/location.controller.dart';
 import 'package:prue/src/models/Userget.dart';
 import 'package:prue/src/models/addplace.dart';
+import 'package:prue/src/models/cart.model.dart';
+import 'package:prue/src/widgets/loadingAlert.dart';
 import 'package:prue/src/widgets/menu.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
@@ -15,7 +17,7 @@ class Maps extends StatefulWidget {
 class _MapsState extends State<Maps> {
   final TextEditingController name = new TextEditingController();
   final TextEditingController adddres = new TextEditingController();
-
+  CartModel cart = new CartModel();
   locationController locationCOntroller = new locationController();
   Completer<GoogleMapController> _controller = Completer();
   double myLat;
@@ -23,6 +25,7 @@ class _MapsState extends State<Maps> {
   double latitude;
   double longitude;
   User user = new User();
+  String error;
 
   var loadingContext;
   bool isLoading = true;
@@ -30,6 +33,9 @@ class _MapsState extends State<Maps> {
   LatLng pont = new LatLng(0.0, 0.0);
   Set<Marker> markers = Set<Marker>();
 
+  closeAlert(BuildContext _context) {
+    Navigator.of(_context).pop();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -162,6 +168,7 @@ class _MapsState extends State<Maps> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       GestureDetector(
+
                         child: Container(
                           color: Colors.orange,
                           child: Center(
@@ -177,6 +184,7 @@ class _MapsState extends State<Maps> {
                           width: width/2.2,
                         ),
                         onTap: (){
+                          goBack();
                         },
                       ),
                       GestureDetector(
@@ -222,6 +230,7 @@ class _MapsState extends State<Maps> {
   @override
   void initState() {
     getLocation();
+    print(cart.getRoute);
   }
 
   _handleTap(LatLng point) {
@@ -240,10 +249,26 @@ class _MapsState extends State<Maps> {
       ),
     ));
   }
+  loading() async {
+    showDialog(
+        context: context,
+        builder: (context) {
+          loadingContext = context;
+          return LoadingAlert('Guardando lugar');
+        });
+  }
+  goBack(){
+    Navigator.pop(context);
+  }
   addPlaces(){
     if(isVissible == true){
       print('no has selecionado ningun lugar');
+      error = 'no has selecionado ningun lugar';
+      _onAlertButtonError2(context);
+
+
     }else {
+      loading();
       latitude = pont.latitude;
       longitude = pont.longitude;
       locationCOntroller.addPlace.name = name.text;
@@ -251,17 +276,24 @@ class _MapsState extends State<Maps> {
       locationCOntroller.addPlace.lat = latitude;
       locationCOntroller.addPlace.lng = longitude;
       locationCOntroller.addPlace.user_id = user.getUser_id;
-      _onAlertButtonError(context);
       if(name.text.length > 0){
         if(adddres.text.length > 0){
           locationCOntroller.addPlaces().then((AddPlace addplace){
+            closeAlert(context);
+            _onAlertButtonError(context);
             print(addplace.name);
+
           });
         }else {
           print('el campo direccion es obligatorio');
+          error = 'el campo direccion es obligatorio';
+          _onAlertButtonError2(context);
         }
       }else{
         print('el campo nombre del lugar es obligatorio');
+        error = 'el campo nombre del lugar es obligatorio';
+        _onAlertButtonError(context);
+
       }
     }
   }
@@ -280,7 +312,28 @@ class _MapsState extends State<Maps> {
             style: TextStyle(color: Colors.white, fontSize: 20),
           ),
           onPressed: (){
-            Navigator.popAndPushNamed(context, "/home");
+            Navigator.popAndPushNamed(context, "/${cart.getRoute}");
+          },
+          width: 120,
+        )
+      ],
+    ).show();
+  }
+  _onAlertButtonError2(context){
+    Alert(
+      context: context,
+      type: AlertType.warning,
+      title: "Advertencia",
+      desc: "$error",
+      buttons: [
+        DialogButton(
+          color: Colors.orange,
+          child: Text(
+            "Aceptar",
+            style: TextStyle(color: Colors.white, fontSize: 20),
+          ),
+          onPressed: (){
+            Navigator.pop(context);
           },
           width: 120,
         )

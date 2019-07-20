@@ -15,17 +15,14 @@ class CartModel {
   static String payment;
   static String areaType;
   static Offices offices = new Offices();
+  static String route;
   static List<ProductModel> products = new List<ProductModel>();
 
-
-
-  //ejemplo
-  static String hola;
-  void set sethola(String value){
-    hola = value;
+  void set setRoute(String value){
+    route = value;
   }
-  String get gethola{
-    return hola;
+  String get getRoute {
+    return route;
   }
   void set setLatitude(double value){
     latitude = value;
@@ -34,12 +31,11 @@ class CartModel {
     return latitude;
   }
   void set setLongitude(double value){
-    latitude = value;
+    longitude = value;
   }
   double get getLongitude{
     return longitude;
   }
-  //fin
 
   void set setSeller_id(int value){
     seller_id = value;
@@ -118,9 +114,11 @@ class CartModel {
     var sale = new Sale();
     sale.place_id = CartModel.place_id;
     sale.employee_id = CartModel.seller_id;
-    sale.office_id = CartModel.offices.id;
     sale.payment_type = "Cash";
     sale.products = this.getPurchasedProducts();
+    sale.lat = CartModel.latitude;
+    sale.lng = CartModel.longitude;
+    sale.place_user_id = CartModel.places_user_id;
     return sale;
   }
    getPurchasedProducts(){
