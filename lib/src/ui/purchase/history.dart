@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:prue/src/bloc/purchaseController.dart';
 import 'package:prue/src/models/purchase.model.dart';
 import 'package:prue/src/models/sale-details-model.dart';
+import 'package:prue/src/widgets/column.dart';
 import 'package:prue/src/widgets/loadingAlert.dart';
 import '../../widgets/menu.dart';
 import 'package:intl/intl.dart';
@@ -319,10 +320,7 @@ class _HistoryState extends State<History> {
                                                                     ],
                                                                   ),
                                                                   Container(
-                                                                    child: ListView
-                                                                        .builder(
-                                                                      shrinkWrap:
-                                                                      true,
+                                                                    child: ColumnBuilder(
                                                                       itemCount: sale
                                                                           .length,
                                                                       itemBuilder:

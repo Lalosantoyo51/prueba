@@ -7,6 +7,7 @@ import 'package:prue/src/models/cart.model.dart';
 import 'package:prue/src/models/purchase.model.dart';
 import 'package:prue/src/models/sale-details-model.dart';
 import 'package:prue/src/utils/enviroment.dart';
+import 'package:prue/src/widgets/column.dart';
 import 'package:prue/src/widgets/loadingAlert.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import '../../bloc/location.controller.dart';
@@ -392,7 +393,7 @@ class _HomeState extends State<Home> {
                                                         return AlertDialog(
                                                             title: Image.asset(
                                                               "assets/orders/${src[index]}",
-                                                              height: 100,
+                                                              height: height/5,
                                                             ),
                                                             content: Container(
                                                               height: 200,
@@ -412,8 +413,8 @@ class _HomeState extends State<Home> {
                                                                           .only(
                                                                           top: 10)),
                                                                   Row(
-                                                                    children: <
-                                                                        Widget>[
+                                                                    children:
+                                                                    <Widget>[
                                                                       Align(
                                                                         alignment:
                                                                         Alignment
@@ -465,62 +466,57 @@ class _HomeState extends State<Home> {
                                                                       ),
                                                                     ],
                                                                   ),
-                                                                  Container(
-                                                                    child: ListView
-                                                                        .builder(
-                                                                      shrinkWrap:
-                                                                      true,
-                                                                      itemCount: sale
-                                                                          .length,
-                                                                      itemBuilder:
-                                                                          (BuildContext
-                                                                      context,
-                                                                          int index) {
-                                                                        return Column(
-                                                                          children: <
-                                                                              Widget>[
-                                                                            Row(
-                                                                              children: <
-                                                                                  Widget>[
-                                                                                Padding(
-                                                                                  padding: EdgeInsets.only(left: 30, right: 40),
-                                                                                  child: Text(
-                                                                                    '${sale[index].quantity}',
-                                                                                    style: Theme.of(context).primaryTextTheme.caption.copyWith(color: Colors.black),
-                                                                                    overflow: TextOverflow.ellipsis,
-                                                                                  ),
+                                                                  ColumnBuilder(
+                                                                    itemCount: sale
+                                                                        .length,
+                                                                    itemBuilder:
+                                                                        (BuildContext
+                                                                    context,
+                                                                        int index) {
+                                                                      return Column(
+                                                                        children: <
+                                                                            Widget>[
+                                                                          Row(
+                                                                            children: <
+                                                                                Widget>[
+                                                                              Padding(
+                                                                                padding: EdgeInsets.only(left: 30, right: 40),
+                                                                                child: Text(
+                                                                                  '${sale[index].quantity}',
+                                                                                  style: Theme.of(context).primaryTextTheme.caption.copyWith(color: Colors.black),
+                                                                                  overflow: TextOverflow.ellipsis,
                                                                                 ),
-                                                                                Expanded(
-                                                                                    child: Container(
-                                                                                        child: Text(
-                                                                                          "${sale[index].productPlace.product.name}",
-                                                                                          maxLines: 3,
-                                                                                          style: Theme.of(context).primaryTextTheme.caption.copyWith(color: Colors.black),
-                                                                                          overflow: TextOverflow.ellipsis,
-                                                                                        ))),
-                                                                                Padding(
-                                                                                    padding: EdgeInsets.only(right: 10),
-                                                                                    child: Row(
-                                                                                      children: <Widget>[
-                                                                                        Text(
-                                                                                          r'$',
-                                                                                          style: Theme.of(context).primaryTextTheme.caption.copyWith(color:Colors.black,),
-                                                                                          overflow: TextOverflow.ellipsis,
-                                                                                        ),
-                                                                                        Text(
-                                                                                          '${formatter.format(sale[index].cost)}',
-                                                                                          style: Theme.of(context).primaryTextTheme.caption.copyWith(color:Colors.black,),
-                                                                                          overflow: TextOverflow.ellipsis,
-                                                                                        ),
-                                                                                      ],
-                                                                                    )
-                                                                                ),
-                                                                              ],
-                                                                            ),
-                                                                          ],
-                                                                        );
-                                                                      },
-                                                                    ),
+                                                                              ),
+                                                                              Expanded(
+                                                                                  child: Container(
+                                                                                      child: Text(
+                                                                                        "${sale[index].productPlace.product.name}",
+                                                                                        maxLines: 3,
+                                                                                        style: Theme.of(context).primaryTextTheme.caption.copyWith(color: Colors.black),
+                                                                                        overflow: TextOverflow.ellipsis,
+                                                                                      ))),
+                                                                              Padding(
+                                                                                  padding: EdgeInsets.only(right: 10),
+                                                                                  child: Row(
+                                                                                    children: <Widget>[
+                                                                                      Text(
+                                                                                        r'$',
+                                                                                        style: Theme.of(context).primaryTextTheme.caption.copyWith(color:Colors.black,),
+                                                                                        overflow: TextOverflow.ellipsis,
+                                                                                      ),
+                                                                                      Text(
+                                                                                        '${formatter.format(sale[index].cost)}',
+                                                                                        style: Theme.of(context).primaryTextTheme.caption.copyWith(color:Colors.black,),
+                                                                                        overflow: TextOverflow.ellipsis,
+                                                                                      ),
+                                                                                    ],
+                                                                                  )
+                                                                              ),
+                                                                            ],
+                                                                          ),
+                                                                        ],
+                                                                      );
+                                                                    },
                                                                   ),
                                                                   Padding(
                                                                       padding: EdgeInsets
@@ -625,7 +621,8 @@ class _HomeState extends State<Home> {
                                                                       ))
                                                                 ],
                                                               ),
-                                                            ));
+                                                            )
+                                                        );
                                                       });
                                                   sale.forEach((sale) {
                                                     print(sale

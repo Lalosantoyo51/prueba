@@ -20,8 +20,6 @@ import './src/ui/profile/changePassword.dart';
 import './src/ui/auth/verefication.dart';
 import './src/models/token.model.dart';
 
-
-
 String _connectionStatus = 'Unknown';
 String tutorial = '';
 
