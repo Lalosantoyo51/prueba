@@ -119,21 +119,30 @@ class _SignInState extends State<SignIn> {
 
   Future _loginFb() async {
     var prefs = await SharedPreferences.getInstance();
-    final FacebookLoginResult result =
-    await facebookSignIn.logInWithReadPermissions(['email']);
-    FacebookAccessToken accessToken = result.accessToken;
-    var token =accessToken.token;
-    print(token);
-    prefs.setString('fb_token', token);
-    Response response;
-    response = await dio.get(
-        '${FACEBOOK_GRAPH_API_URL}me?fields=id%2Cemail%2Cgender%2Cfirst_name%2Clast_name&access_token=${token}');
-    Map<String, dynamic> user = jsonDecode(response.data);
-    print(user['email']);
-    fb_token = token;
-    _authController.fb_token = token;
-    _authController.facebook_id = int.parse(user['id']);
-    signInwithFB();
+
+    await facebookSignIn.logInWithReadPermissions(['email']).then((result)async{
+      FacebookAccessToken accessToken = result.accessToken;
+      var token =accessToken.token;
+      if(token != null){
+        prefs.setString('fb_token', token);
+        Response response;
+        response = await dio.get(
+            '${FACEBOOK_GRAPH_API_URL}me?fields=id%2Cemail%2Cgender%2Cfirst_name%2Clast_name&access_token=${token}');
+        Map<String, dynamic> user = jsonDecode(response.data);
+        print(user['email']);
+        fb_token = token;
+        _authController.fb_token = token;
+        _authController.facebook_id = int.parse(user['id']);
+        signInwithFB();
+
+      }else {
+        setState(() {
+          setState(() {
+            isBussing = false;
+          });
+        });
+      }
+    });
 
 
   }
@@ -158,6 +167,9 @@ class _SignInState extends State<SignIn> {
           });
         }
       }
+      setState(() {
+        isBussing = false;
+      });
     }
   }
 

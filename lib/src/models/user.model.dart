@@ -17,9 +17,11 @@ class UserModel  {
   String newpassword;
 
   String newpassword_confirmation;
+  int verified;
 
   UserModel({this.id, this.name, this.last_name, this.gender, this.phone,
-      this.birthday, this.password,this.newpassword,this.newpassword_confirmation});
+      this.birthday, this.password,this.newpassword,
+    this.newpassword_confirmation, this.verified});
 
   Map toJson() => {
     'password': this.password,
@@ -34,7 +36,8 @@ class UserModel  {
       last_name : json ['last_name'],
       gender : json['gender'],
       phone : json['phone'],
-      birthday : json['birthday']
+      birthday : json['birthday'],
+      verified: json['verified']
     );
   }
 

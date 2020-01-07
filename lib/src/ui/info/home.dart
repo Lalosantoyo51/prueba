@@ -78,7 +78,10 @@ class _HomeState extends State<Home> {
         user.setLast_Name = userModel.last_name;
         user.setUser_id = userModel.id;
         cart.setUser_id = userModel.id;
-        print(userModel.gender);
+        print(userModel.verified);
+        if(userModel.verified == 1){
+          Navigator.of(context).popAndPushNamed('/Verification');
+        }
       });
     }
     getLocation();

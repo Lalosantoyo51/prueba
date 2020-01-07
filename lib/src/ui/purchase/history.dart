@@ -1,9 +1,12 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:prue/src/bloc/purchaseController.dart';
 import 'package:prue/src/models/purchase.model.dart';
 import 'package:prue/src/models/sale-details-model.dart';
 import 'package:prue/src/widgets/column.dart';
 import 'package:prue/src/widgets/loadingAlert.dart';
+import 'package:prue/src/widgets/raiting.dart';
+import 'package:smooth_star_rating/smooth_star_rating.dart';
 import '../../widgets/menu.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -21,6 +24,7 @@ class _HistoryState extends State<History> {
       BuildContext _context) {
     Navigator.of(_context).pop();
   }
+  var rating = 0.0;
 
   DateFormat dateFormat;
   final formatter = new NumberFormat("0.00");
@@ -202,7 +206,7 @@ class _HistoryState extends State<History> {
                                                     fontSize: height/24,                                                    color: Colors.orange,
                                                     fontWeight: FontWeight.bold)),
                                           )),
-                                        purchaseModel[index].status == 'Delivered' && purchaseModel[index].qualified_by_customer == 'Unrated' ?
+                                        purchaseModel[index].status != 'Delivered' && purchaseModel[index].qualified_by_customer == 'Unrated' ?
                                         Padding(
                                             padding: EdgeInsets.only(left: 0),
                                             child: FlatButton(
@@ -210,7 +214,15 @@ class _HistoryState extends State<History> {
                                                 Icons.star,
                                                 color: Colors.orange,
                                                 size: height/22,
-                                              ),)):Padding(
+                                              ),
+                                              onPressed: (){
+                                                showDialog(
+                                                    context: context,
+                                                    builder:
+                                                        (BuildContext context) {
+                                                      return MyDialog(purchaseModel[index].employeeModel.name,purchaseModel[index].id + 1000,purchaseModel[index].created_at);});
+                                              },
+                                            )):Padding(
                                             padding: EdgeInsets.only(left:0),
                                             child: FlatButton(
                                               child: Container(),)),

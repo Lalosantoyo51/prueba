@@ -62,8 +62,7 @@ class _SignUpState extends State<SignUp> {
     _authController.signUpModel.email = _authController.email.text;
     _authController.signUpModel.phone = int.parse(_authController.phone.text);
     _authController.signUpModel.password = _authController.password.text;
-    _authController.signUpModel.password_confirmation =
-        _authController.password_confirmation.text;
+    _authController.signUpModel.password_confirmation = _authController.password_confirmation.text;
     _authController.signUpModel.birthday = _authController.birthday;
     _authController.signUpModel.gender = _authController.gender.text;
     final prefs = await SharedPreferences.getInstance();
